@@ -118,3 +118,50 @@ AFTER UPDATE ON Inventory
 FOR EACH ROW EXECUTE FUNCTION log_inventory_changes();
 
 
+-- ROLES
+-- Crear el rol de administrador con control total
+CREATE ROLE admin_role WITH LOGIN PASSWORD 'admin_password';
+GRANT ALL PRIVILEGES ON DATABASE modular TO admin_role;
+
+-- Crear el rol de análisis de ventas (lectura en tablas de ventas y productos)
+CREATE ROLE sales_analyst_role WITH LOGIN PASSWORD 'sales_password';
+GRANT CONNECT ON DATABASE modular TO sales_analyst_role;
+GRANT USAGE ON SCHEMA public TO sales_analyst_role;
+
+-- Crear el rol de producción (lectura en productos, insumos, inventario y producción)
+CREATE ROLE production_role WITH LOGIN PASSWORD 'production_password';
+GRANT CONNECT ON DATABASE modular TO production_role;
+GRANT USAGE ON SCHEMA public TO production_role;
+
+-- PERMISOS PARA ROLES
+-- Administrador
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO admin_role;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO admin_role;
+GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO admin_role;
+
+-- Analista de ventas
+GRANT SELECT ON Sales, Products TO sales_analyst_role;
+GRANT SELECT ON Categories_Products TO sales_analyst_role;
+GRANT SELECT ON salessummary TO sales_analyst_role;
+
+-- Operador de Producción
+GRANT SELECT ON Resources, Inventory, Products, Production TO production_role;
+GRANT SELECT ON Categories_Resources, Categories_Products TO production_role;
+GRANT SELECT ON Supplier TO production_role;
+
+-- USUARIOS
+-- Crear usuarios y asignarlos a los roles
+CREATE USER admin_user WITH PASSWORD 'admin_user_password';
+GRANT admin_role TO admin_user;
+
+CREATE USER sales_user WITH PASSWORD 'sales_user_password';
+GRANT sales_analyst_role TO sales_user;
+
+CREATE USER production_user WITH PASSWORD 'production_user_password';
+GRANT production_role TO production_user;
+
+
+
+
+
+
