@@ -1,11 +1,11 @@
 -- TABLAS PRINCIPALES
--- Creación de la tabla Categories_Resources
+-- Tabla Categories_Resources
 CREATE TABLE Categories_Resources (
     ID SERIAL PRIMARY KEY,
     Name_Category VARCHAR(255) NOT NULL
 );
 
--- Creación de la tabla Supplier
+-- Tabla Supplier
 CREATE TABLE Supplier (
     ID SERIAL PRIMARY KEY,
     Name_Supplier VARCHAR(255) NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE Supplier (
     Phone NUMERIC(10, 0) NOT NULL
 );
 
--- Creación de la tabla Resources
+-- Tabla Resources
 CREATE TABLE Resources (
     ID SERIAL PRIMARY KEY,
     Name_Resource VARCHAR(255) NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE Resources (
     ID_Supplier INTEGER NOT NULL REFERENCES Supplier(ID)
 );
 
--- Creación de la tabla Inventory
+-- Tabla Inventory
 CREATE TABLE Inventory (
     ID SERIAL PRIMARY KEY,
     ID_Resource INTEGER NOT NULL REFERENCES Resources(ID),
@@ -34,13 +34,13 @@ CREATE TABLE Inventory (
     Expiration_Date DATE
 );
 
--- Creación de la tabla Categories_Products
+-- Tabla Categories_Products
 CREATE TABLE Categories_Products (
     ID SERIAL PRIMARY KEY,
     Name_Category VARCHAR(255) NOT NULL
 );
 
--- Creación de la tabla Products
+-- Tabla Products
 CREATE TABLE Products (
     ID SERIAL PRIMARY KEY,
     Name_Product VARCHAR(255) NOT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE Products (
     ID_Category INTEGER NOT NULL REFERENCES Categories_Products(ID)
 );
 
--- Creación de la tabla Production
+-- Tabla Production
 CREATE TABLE Production (
     ID SERIAL PRIMARY KEY,
     ID_Product INTEGER NOT NULL REFERENCES Products(ID),
@@ -59,7 +59,7 @@ CREATE TABLE Production (
     Production_Date DATE NOT NULL
 );
 
--- Creación de la tabla Sales
+-- Tabla Sales
 CREATE TABLE Sales (
     ID SERIAL PRIMARY KEY,
     ID_Product INTEGER NOT NULL REFERENCES Products(ID),
@@ -68,13 +68,21 @@ CREATE TABLE Sales (
     Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- Creación de la tabla Employees
+-- Tabla Employees
 CREATE TABLE Employees (
     ID SERIAL PRIMARY KEY,
     Name_Employee VARCHAR(255) NOT NULL,
     LastName VARCHAR(255) NOT NULL,
     Email VARCHAR(255) NOT NULL UNIQUE,
     Password TEXT NOT NULL
+);
+
+-- Tabla Product_Resources
+CREATE TABLE Product_Resources (
+    ID SERIAL PRIMARY KEY,
+    ID_Product INTEGER NOT NULL REFERENCES Products(ID) ON DELETE CASCADE,
+    ID_Resource INTEGER NOT NULL REFERENCES Resources(ID) ON DELETE CASCADE,
+    Quantity INTEGER NOT NULL DEFAULT 1
 );
 
 --TABLAS SECUNDARIAS
@@ -159,6 +167,9 @@ GRANT sales_analyst_role TO sales_user;
 
 CREATE USER production_user WITH PASSWORD 'production_user_password';
 GRANT production_role TO production_user;
+
+
+
 
 
 
