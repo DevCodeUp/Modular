@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventario - Pastelería</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Gestión de Inventario - Pastelería</h1>
+    <nav>
+      <button onclick="showSection('categories')">Categorías</button>
+      <button onclick="showSection('suppliers')">Proveedores</button>
+      <button onclick="showSection('resources')">Recursos</button>
+      <button onclick="showSection('inventory')">Inventario</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Categorías -->
+    <section id="categories" class="hidden">
+      <h2>Categorías</h2>
+      <div class="form-container">
+        <form id="add-category-form">
+          <input type="text" id="category-name" placeholder="Nombre de Categoría" required>
+          <button type="submit">Agregar Categoría</button>
+        </form>
+      </div>
+      <table id="categories-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <!-- Proveedores -->
+    <section id="suppliers" class="hidden">
+      <h2>Proveedores</h2>
+      <div class="form-container">
+        <form id="add-supplier-form">
+          <input type="text" id="supplier-name" placeholder="Nombre" required>
+          <input type="text" id="supplier-address" placeholder="Dirección" required>
+          <input type="text" id="supplier-phone" placeholder="Teléfono" required>
+          <button type="submit">Agregar Proveedor</button>
+        </form>
+      </div>
+      <table id="suppliers-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Dirección</th>
+            <th>Teléfono</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <!-- Recursos -->
+    <section id="resources" class="hidden">
+      <h2>Recursos</h2>
+      <div class="form-container">
+        <form id="add-resource-form">
+          <input type="text" id="resource-name" placeholder="Nombre" required>
+          <textarea id="resource-description" placeholder="Descripción"></textarea>
+          <input type="number" id="resource-price" placeholder="Precio" required>
+          <select id="resource-category">
+            <option value="">Seleccionar Categoría</option>
+          </select>
+          <select id="resource-supplier">
+            <option value="">Seleccionar Proveedor</option>
+          </select>
+          <button type="submit">Agregar Recurso</button>
+        </form>
+      </div>
+      <table id="resources-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Categoría</th>
+            <th>Proveedor</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <!-- Inventario -->
+    <section id="inventory" class="hidden">
+      <h2>Inventario</h2>
+      <div class="form-container">
+        <form id="add-inventory-form">
+          <select id="inventory-resource">
+            <option value="">Seleccionar Recurso</option>
+          </select>
+          <input type="text" id="inventory-lot" placeholder="Número de Lote" required>
+          <input type="number" id="inventory-stock" placeholder="Cantidad en Stock" required>
+          <input type="number" id="inventory-minimum-stock" placeholder="Stock Mínimo" required>
+          <input type="date" id="inventory-expiration-date" placeholder="Fecha de Caducidad" required>
+          <button type="submit">Agregar Inventario</button>
+        </form>
+      </div>
+      <table id="inventory-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Recurso</th>
+            <th>Lote</th>
+            <th>Stock</th>
+            <th>Stock Mínimo</th>
+            <th>Fecha de Caducidad</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
