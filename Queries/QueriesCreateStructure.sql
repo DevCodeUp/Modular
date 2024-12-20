@@ -11,7 +11,8 @@ CREATE TABLE Supplier (
     Name_Supplier VARCHAR(255) NOT NULL,
     Address TEXT NOT NULL,
     Lada INTEGER NOT NULL,
-    Phone NUMERIC(10, 0) NOT NULL
+    Phone NUMERIC(10, 0) NOT NULL,
+	delivery_time INTEGER NOT NULL
 );
 
 -- Tabla Resources
@@ -49,8 +50,8 @@ CREATE TABLE Products (
     ID_Category INTEGER NOT NULL REFERENCES Categories_Products(ID)
 );
 
--- Tabla Production
-CREATE TABLE Production (
+-- Tabla Store
+CREATE TABLE Store (
     ID SERIAL PRIMARY KEY,
     ID_Product INTEGER NOT NULL REFERENCES Products(ID),
     No_Lot INTEGER NOT NULL,
@@ -85,6 +86,48 @@ CREATE TABLE Product_Resources (
     Quantity INTEGER NOT NULL DEFAULT 1
 );
 
+-- Tabla Orders
+CREATE TABLE Orders (
+    ID SERIAL PRIMARY KEY,
+    ID_Resource INTEGER NOT NULL REFERENCES Resources(ID),
+    Quantity INTEGER NOT NULL,
+    Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Delivered BOOLEAN NOT NULL
+);
+
+-- Tabla Factories
+CREATE TABLE Factories (
+    ID SERIAL PRIMARY KEY,
+    cod_postal INTEGER NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    Country VARCHAR(255) NOT NULL,
+    State VARCHAR(255) NOT NULL
+);
+
+-- Tabla Equipment
+CREATE TABLE Equipment (
+    ID SERIAL PRIMARY KEY,
+    ID_Factory INTEGER NOT NULL REFERENCES Factories(ID),
+    ID_Product INTEGER NOT NULL REFERENCES Products(ID),
+    Name VARCHAR(255) NOT NULL,
+    Min_Prod INTEGER NOT NULL,
+    Unit_Measure VARCHAR(3) NOT NULL,
+    Time INTEGER NOT NULL,
+    Unit_Time VARCHAR(1) NOT NULL
+);
+
+--Tabla production
+CREATE TABLE Production (
+    ID SERIAL PRIMARY KEY,
+    ID_Equipment INTEGER NOT NULL REFERENCES Equipment(ID),
+    Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Quant_Prod INTEGER NOT NULL,
+    Unit_Measure VARCHAR(3) NOT NULL,
+    Time INTEGER NOT NULL,
+    Unit_Time VARCHAR(1) NOT NULL
+);
+
 --TABLAS SECUNDARIAS
 -- Tablas de Logs
 CREATE TABLE Inventory_Log (
@@ -100,6 +143,10 @@ CREATE TABLE Inventory_Log (
 CREATE INDEX idx_resources_name ON Resources(Name_Resource);
 CREATE INDEX idx_products_name ON Products(Name_Product);
 CREATE INDEX idx_sales_date ON Sales(Date);
+CREATE INDEX idx_orders_id_resource ON Orders(ID_Resource);
+CREATE INDEX idx_equipment_id_factory ON Equipment(ID_Factory);
+CREATE INDEX idx_equipment_id_product ON Equipment(ID_Product);
+CREATE INDEX idx_production_id_equipment ON Production(ID_Equipment);
 
 -- VISTAS
 -- Ventas Totales
@@ -167,8 +214,6 @@ GRANT sales_analyst_role TO sales_user;
 
 CREATE USER production_user WITH PASSWORD 'production_user_password';
 GRANT production_role TO production_user;
-
-
 
 
 

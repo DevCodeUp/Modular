@@ -57,3 +57,115 @@ BEGIN
         END LOOP;
     END LOOP;
 END $$;
+
+-- 7. Insertar registros en la tabla Inventory
+INSERT INTO Inventory (ID_Resource, No_Lot, Stock, Minimum_Stock, Expiration_Date)
+SELECT 
+    r.ID AS ID_Resource,
+    (FLOOR(RANDOM() * 1000) + 1000) AS No_Lot, -- Genera un número de lote aleatorio entre 1000 y 2000
+    (FLOOR(RANDOM() * 50) + 10) AS Stock,      -- Stock inicial aleatorio entre 10 y 60
+    5 AS Minimum_Stock,                       -- Stock mínimo fijo
+    CASE 
+        WHEN cr.Name_Category = 'Perecederos' THEN CURRENT_DATE + (INTERVAL '5 days')  -- Perecederos: 5 días a partir de hoy
+        WHEN cr.Name_Category = 'No perecederos' THEN CURRENT_DATE + (INTERVAL '180 days') -- No perecederos: 180 días
+    END AS Expiration_Date
+FROM Resources r
+JOIN Categories_Resources cr ON r.ID_Category = cr.ID;
+
+-- 8. Simular ventas para Sales
+DO $$
+DECLARE
+    v_product_id INTEGER;        -- Variable para el ID del producto
+    v_amount INTEGER;            -- Cantidad vendida
+    v_price FLOAT;               -- Precio total calculado
+    v_date TIMESTAMP;            -- Fecha de venta aleatoria
+    v_counter INTEGER := 0;      -- Contador de registros
+BEGIN
+    -- Generar 100,000 registros
+    WHILE v_counter < 100000 LOOP
+        -- Seleccionar aleatoriamente un producto de la tabla Products
+        SELECT ID, Price
+        INTO v_product_id, v_price
+        FROM Products
+        ORDER BY RANDOM()
+        LIMIT 1;
+
+        -- Generar cantidad vendida (entre 1 y 10 unidades)
+        v_amount := FLOOR(RANDOM() * 10) + 1;
+
+        -- Generar fecha de venta aleatoria en los últimos 5 años
+        v_date := NOW() - (RANDOM() * INTERVAL '5 years');
+
+        -- Insertar el registro en la tabla Sales
+        INSERT INTO Sales (ID_Product, Amount, Price, Date)
+        VALUES (v_product_id, v_amount, v_price * v_amount, v_date);
+
+        -- Incrementar el contador
+        v_counter := v_counter + 1;
+    END LOOP;
+END $$;
+
+-- INSERTAR UNA FÁBRICA EN LA TABLA Factories
+INSERT INTO Factories (cod_postal, address, name, Country, State)
+VALUES 
+(12345, 'Av. Principal 123', 'Fábrica Pastelitos Felices', 'México', 'Ciudad de México');
+
+-- INSERTAR MÁQUINAS EN LA TABLA Equipment
+-- Máquinas asignadas a productos existentes (simulando una producción ideal)
+INSERT INTO Equipment (ID_Factory, ID_Product, Name, Min_Prod, Unit_Measure, Time, Unit_Time)
+VALUES
+(1, 1, 'Mezcladora Industrial', 50, 'kg', 2, 'h'),
+(1, 2, 'Horno Rotatorio', 200, 'pz', 4, 'h'),
+(1, 3, 'Decoradora Automática', 150, 'pz', 3, 'h');
+
+-- SIMULAR PRODUCCIONES EN LA TABLA Production (500 registros)
+-- Producciones que alcanzan el objetivo (Min_Prod) y producciones fallidas
+DO $$
+BEGIN
+    FOR i IN 1..500 LOOP
+        INSERT INTO Production (ID_Equipment, Date, Quant_Prod, Unit_Measure, Time, Unit_Time)
+        VALUES 
+        (
+            (CASE WHEN i % 3 = 0 THEN 1 WHEN i % 3 = 1 THEN 2 ELSE 3 END), -- Alternar entre las 3 máquinas
+            NOW() - (i || ' days')::INTERVAL,                              -- Fecha simulada (últimos 500 días)
+            (CASE WHEN i % 5 = 0 THEN (SELECT Min_Prod FROM Equipment WHERE ID = (i % 3 + 1)) - 10 
+                  ELSE (SELECT Min_Prod FROM Equipment WHERE ID = (i % 3 + 1)) + 5 END), -- Éxitos y fallos
+            (SELECT Unit_Measure FROM Equipment WHERE ID = (i % 3 + 1)),
+            (SELECT Time FROM Equipment WHERE ID = (i % 3 + 1)),
+            (SELECT Unit_Time FROM Equipment WHERE ID = (i % 3 + 1))
+        );
+    END LOOP;
+END $$;
+
+-- LLENAR LA TABLA Store CON LOS PRODUCTOS PRODUCIDOS (RELACIONADO CON Production)
+DO $$
+BEGIN
+    FOR i IN 1..500 LOOP
+        INSERT INTO Store (ID_Product, No_Lot, Amount, Expiration_Date, Production_Date)
+        VALUES 
+        (
+            (CASE WHEN i % 3 = 0 THEN 1 WHEN i % 3 = 1 THEN 2 ELSE 3 END), -- Alternar entre los productos
+            i,                                                            -- Número de lote
+            (SELECT Quant_Prod FROM Production WHERE ID = i),             -- Cantidad producida en Production
+            NOW() + (30 || ' days')::INTERVAL,                            -- Fecha de expiración (+30 días)
+            (SELECT Date FROM Production WHERE ID = i)                    -- Fecha de producción en Production
+        );
+    END LOOP;
+END $$;
+
+-- SIMULAR PEDIDOS EN LA TABLA Orders (200 pedidos)
+-- Pedidos realizados a los proveedores para diferentes recursos
+DO $$
+BEGIN
+    FOR i IN 1..200 LOOP
+        INSERT INTO Orders (ID_Resource, Quantity, Date, Delivered)
+        VALUES 
+        (
+            (CASE WHEN i % 4 = 0 THEN 1 WHEN i % 4 = 1 THEN 2 WHEN i % 4 = 2 THEN 3 ELSE 4 END), -- Alternar recursos
+            (CASE WHEN i % 5 = 0 THEN 100 ELSE 50 END),                                         -- Cantidad pedida
+            NOW() - (i || ' days')::INTERVAL,                                                  -- Fecha simulada
+            (CASE WHEN i % 3 = 0 THEN TRUE ELSE FALSE END)                                      -- Alternar entregado o no
+        );
+    END LOOP;
+END $$;
+
