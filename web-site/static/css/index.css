@@ -1,0 +1,292 @@
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Añadir estas líneas en la parte superior */
+html,
+body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+header {
+  background-color: #2b3e50;
+  color: #fff;
+  text-align: center;
+  padding: 30px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 1.2em;
+  }
+}
+
+/* Body */
+body {
+  font-family: 'Lato', sans-serif;
+  background-color: #f2f2f2;
+  color: #333;
+}
+
+/* Botón de inicio de sesión alineado a la derecha */
+nav {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.login-button {
+  background-color: #4a90e2;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  font-weight: 700;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  margin-right: 20px; /* Ajuste para que esté a la derecha */
+}
+
+.login-button:hover {
+  background-color: #357abf;
+}
+
+/* Formulario de inicio de sesión (flotante) */
+.login-form {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 30px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  width: 300px;
+  border-radius: 8px;
+}
+
+.login-form h3 {
+  margin-bottom: 20px;
+  font-size: 1.5em;
+  color: #333;
+}
+
+.login-form label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 1.1em;
+  color: #666;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1em;
+}
+
+.login-form button {
+  background-color: #4a90e2;
+  color: white;
+  padding: 10px;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.login-form button:hover {
+  background-color: #357abf;
+}
+
+#close-login {
+  background-color: #f44336;
+}
+
+#close-login:hover {
+  background-color: #d32f2f;
+}
+
+/* Overlay para bloquear el fondo */
+body.show-login-form::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+/* Responsividad del formulario*/
+@media (max-width: 768px) {
+  .login-form {
+      width: 80%;
+  }
+}
+
+/* Navigation Menu */
+nav {
+  background-color: #1f2d3d;
+
+  ul {
+    display: flex;
+    justify-content: center;
+    padding: 15px 0;
+
+    li {
+      list-style: none;
+
+      a {
+        color: #fff;
+        padding: 10px 20px;
+        margin: 0 10px;
+        text-decoration: none;
+        font-weight: 700;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      a:hover {
+        background-color: #eeee2d;
+        color: #000000;
+      }
+    }
+  }
+}
+
+/* Floating menu for smaller screens */
+.menu-icon {
+  display: none;
+  font-size: 2em;
+  color: white;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  nav ul {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background-color: #1f2d3d;
+    width: 100%;
+    padding: 20px 0;
+
+    li {
+      text-align: center;
+      padding: 10px 0;
+    }
+  }
+
+  .menu-icon {
+    display: block;
+  }
+}
+
+nav ul.show {
+  display: flex;
+}
+
+/* Hero Section */
+.hero {
+  background-color: #2b3e50;
+  color: #fff;
+  text-align: center;
+  padding: 80px 20px;
+
+  h2 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+  }
+
+  p {
+    font-size: 1.5em;
+  }
+}
+
+/* Main Content */
+.content {
+  max-width: 1200px;
+  margin: 50px auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.content-section {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 30%;
+  margin-bottom: 20px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  h3 {
+    font-size: 1.8em;
+    color: #1f2d3d;
+    margin-bottom: 20px;
+  }
+
+  p {
+    font-size: 1.1em;
+    color: #666;
+  }
+}
+
+.content-section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Footer */
+footer {
+  background-color: #1f2d3d;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  margin-top: auto;
+  /* Hace que el footer se mantenga abajo */
+
+  p {
+    font-size: 0.9em;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .content-section {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .hero {
+    padding: 60px 20px;
+
+    h2 {
+      font-size: 2em;
+    }
+  }
+}
