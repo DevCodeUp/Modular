@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inventario - Pastelería</title>
+  <title>Gestión de Inventarios</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header>
-    <h1>Gestión de Inventario - Pastelería</h1>
+    <h1>Gestión de Inventarios</h1>
     <nav>
       <button onclick="showSection('categories')">Categorías</button>
       <button onclick="showSection('suppliers')">Proveedores</button>
@@ -21,18 +21,12 @@
     <!-- Categorías -->
     <section id="categories" class="hidden">
       <h2>Categorías</h2>
-      <div class="form-container">
-        <form id="add-category-form">
-          <input type="text" id="category-name" placeholder="Nombre de Categoría" required>
-          <button type="submit">Agregar Categoría</button>
-        </form>
-      </div>
+      <button onclick="openModal('category-modal')">Agregar Categoría</button>
       <table id="categories-table">
         <thead>
           <tr>
             <th>ID</th>
             <th>Nombre</th>
-            <th>Acciones</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -42,14 +36,7 @@
     <!-- Proveedores -->
     <section id="suppliers" class="hidden">
       <h2>Proveedores</h2>
-      <div class="form-container">
-        <form id="add-supplier-form">
-          <input type="text" id="supplier-name" placeholder="Nombre" required>
-          <input type="text" id="supplier-address" placeholder="Dirección" required>
-          <input type="text" id="supplier-phone" placeholder="Teléfono" required>
-          <button type="submit">Agregar Proveedor</button>
-        </form>
-      </div>
+      <button onclick="openModal('supplier-modal')">Agregar Proveedor</button>
       <table id="suppliers-table">
         <thead>
           <tr>
@@ -57,7 +44,6 @@
             <th>Nombre</th>
             <th>Dirección</th>
             <th>Teléfono</th>
-            <th>Acciones</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -67,20 +53,7 @@
     <!-- Recursos -->
     <section id="resources" class="hidden">
       <h2>Recursos</h2>
-      <div class="form-container">
-        <form id="add-resource-form">
-          <input type="text" id="resource-name" placeholder="Nombre" required>
-          <textarea id="resource-description" placeholder="Descripción"></textarea>
-          <input type="number" id="resource-price" placeholder="Precio" required>
-          <select id="resource-category">
-            <option value="">Seleccionar Categoría</option>
-          </select>
-          <select id="resource-supplier">
-            <option value="">Seleccionar Proveedor</option>
-          </select>
-          <button type="submit">Agregar Recurso</button>
-        </form>
-      </div>
+      <button onclick="openModal('resource-modal')">Agregar Recurso</button>
       <table id="resources-table">
         <thead>
           <tr>
@@ -88,9 +61,6 @@
             <th>Nombre</th>
             <th>Descripción</th>
             <th>Precio</th>
-            <th>Categoría</th>
-            <th>Proveedor</th>
-            <th>Acciones</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -100,34 +70,63 @@
     <!-- Inventario -->
     <section id="inventory" class="hidden">
       <h2>Inventario</h2>
-      <div class="form-container">
-        <form id="add-inventory-form">
-          <select id="inventory-resource">
-            <option value="">Seleccionar Recurso</option>
-          </select>
-          <input type="text" id="inventory-lot" placeholder="Número de Lote" required>
-          <input type="number" id="inventory-stock" placeholder="Cantidad en Stock" required>
-          <input type="number" id="inventory-minimum-stock" placeholder="Stock Mínimo" required>
-          <input type="date" id="inventory-expiration-date" placeholder="Fecha de Caducidad" required>
-          <button type="submit">Agregar Inventario</button>
-        </form>
-      </div>
+      <button onclick="openModal('inventory-modal')">Agregar Inventario</button>
       <table id="inventory-table">
         <thead>
           <tr>
             <th>ID</th>
             <th>Recurso</th>
-            <th>Lote</th>
-            <th>Stock</th>
-            <th>Stock Mínimo</th>
+            <th>Cantidad</th>
             <th>Fecha de Caducidad</th>
-            <th>Acciones</th>
           </tr>
         </thead>
         <tbody></tbody>
       </table>
     </section>
   </main>
+
+  <!-- Modales -->
+  <div id="category-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Agregar Categoría</h3>
+      <input type="text" id="category-name" placeholder="Nombre de Categoría" required>
+      <button onclick="addCategory()">Guardar</button>
+      <button onclick="closeModal('category-modal')">Cerrar</button>
+    </div>
+  </div>
+
+  <div id="supplier-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Agregar Proveedor</h3>
+      <input type="text" id="supplier-name" placeholder="Nombre" required>
+      <input type="text" id="supplier-address" placeholder="Dirección" required>
+      <input type="text" id="supplier-phone" placeholder="Teléfono" required>
+      <button onclick="addSupplier()">Guardar</button>
+      <button onclick="closeModal('supplier-modal')">Cerrar</button>
+    </div>
+  </div>
+
+  <div id="resource-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Agregar Recurso</h3>
+      <input type="text" id="resource-name" placeholder="Nombre" required>
+      <textarea id="resource-description" placeholder="Descripción"></textarea>
+      <input type="number" id="resource-price" placeholder="Precio" required>
+      <button onclick="addResource()">Guardar</button>
+      <button onclick="closeModal('resource-modal')">Cerrar</button>
+    </div>
+  </div>
+
+  <div id="inventory-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Agregar Inventario</h3>
+      <input type="text" id="inventory-resource" placeholder="Recurso" required>
+      <input type="number" id="inventory-quantity" placeholder="Cantidad" required>
+      <input type="date" id="inventory-expiration" placeholder="Fecha de Caducidad" required>
+      <button onclick="addInventory()">Guardar</button>
+      <button onclick="closeModal('inventory-modal')">Cerrar</button>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
