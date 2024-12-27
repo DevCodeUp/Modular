@@ -6,6 +6,6 @@ main = Blueprint('main', __name__)
 def index():
   return render_template('index.html')
 
-@main.route('/calidad')
-def calidad():
-  return render_template('calidad.html')
+@main.route('/config')
+def config():
+  return render_template('config.html')

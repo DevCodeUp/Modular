@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Almacén - Inicio</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/config.css')}}">
+</head>
+<body>
+    <header>
+        <h1>ERP Inteligente para Fábricas</h1>
+        <p>Automatización y análisis avanzado para mejorar tu producción</p>
+    
+        <!-- Menú flotante -->
+        <nav id="navbar">
+          <div class="menu-icon" id="menu-icon">
+            <span>&#9776;</span>
+          </div>
+          <ul id="nav-list">
+            <li><a href="{{ url_for('main.index') }}" class="nav-button">Inicio</a></li>
+            <li><a href="#rendimiento" class="nav-button">Rendimiento</a></li>
+            <li><a href="#ia" class="nav-button">IA</a></li>
+            <li><a href="{{ url_for('main.config') }}" class="nav-button">Configuración</a></li>
+          </ul>
+        </nav>
+    </header>
+  <main>
+    
+  </main>
+  <footer>
+    <p>ERP Inteligente - Soluciones avanzadas para la industria. &copy; 2024</p>
+  </footer>
+  <script src="{{ url_for('static', filename='js/config.js')}}"></script>
+</body>
+</html>
