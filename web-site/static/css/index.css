@@ -6,8 +6,7 @@
 }
 
 /* Añadir estas líneas en la parte superior */
-html,
-body {
+html, body {
   height: 100%;
   display: flex;
   flex-direction: column;
