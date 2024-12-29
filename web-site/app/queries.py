@@ -24,13 +24,35 @@ def get_table_data(section):
     'supplier': 
     """
     SELECT id AS "ID", name_supplier AS "Proveedor", address AS "Dirección",
-    lada AS "Lada", phone AS "Teléfono", email AS "Email", delivery_time AS "Tiempo de distribución"
+    lada AS "Lada", phone AS "Teléfono", email AS "Email", delivery_time AS "Tiempo de distribución (Días)"
     FROM supplier
     """,
-    'categories_products': 'categories_products',
-    'catalogue_products': 'products',
-    'factories': 'factories',
-    'equipment': 'equipment'
+    'categories_products': 
+    """
+    SELECT id AS "ID", name_category AS "Categoría" FROM categories_products
+    """,
+    'catalogue_products': 
+    """
+    SELECT pr.id AS "ID", pr.name_product AS "Producto", pr.description AS "Descripción",
+    CONCAT('$', TO_CHAR(pr.price, 'FM999,999,999.00')) AS "Precio",
+    cat.name_category AS "Categoría"  FROM products pr
+    INNER JOIN categories_products cat ON pr.id_category = cat.id
+    """,
+    'factories': 
+    """
+    SELECT id AS "ID", name AS "Fábrica", cod_postal AS "Código Postal",
+    address AS "Dirección", country AS "País", state AS "Estado"
+    FROM factories
+    """,
+    'equipment': 
+    """
+    SELECT equ.id AS "ID", fac.name AS "Fábrica", pr.name_product AS "Producto Producido",
+    equ.name AS "Máquina/Equipo", CONCAT(TO_CHAR(equ.min_prod, 'FM999,999,999'), ' ', equ.unit_measure) AS "Mínimo de Producción",
+    CONCAT(TO_CHAR(equ.time, 'FM999,999,999'), ' ', equ.unit_time) AS "Tiempo Necesario de Producción"
+    FROM equipment equ
+    INNER JOIN factories fac ON equ.id_factory = fac.id
+    INNER JOIN products pr ON equ.id_product = pr.id
+    """
     }
 
     try:
