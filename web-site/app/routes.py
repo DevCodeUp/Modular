@@ -5,13 +5,8 @@ main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
-    return render_template('index.html')
+  return render_template('index.html')
 
-<<<<<<< Updated upstream
-@main.route('/about')
-def about():
-    return render_template('about.html')
-=======
 @main.route('/config')
 def config():
   return render_template('config.html')
@@ -100,4 +95,3 @@ def config_parameters(section):
     data=data,
     fields=fields
   )
->>>>>>> Stashed changes
