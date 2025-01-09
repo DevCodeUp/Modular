@@ -15,21 +15,21 @@
   <header>
     <h1>ERP Inteligente para Fábricas</h1>
     <p>Automatización y análisis avanzado para mejorar tu producción</p>
-  </header>
 
-  <!-- Menú flotante -->
-  <nav id="navbar">
-    <div class="menu-icon" id="menu-icon">
-      <span>&#9776;</span>
-    </div>
-    <ul id="nav-list">
-      <li><a href="{{ url_for('main.index') }}" class="nav-button">Inicio</a></li>
-      <li><a href="{{ url_for('main.calidad') }}" class="nav-button">Calidad</a></li>
-      <li><a href="#rendimiento" class="nav-button">Rendimiento</a></li>
-      <li><a href="#ia" class="nav-button">IA</a></li>
-    </ul>
-    <a href="#" class="login-button" id="login-btn">Iniciar sesión</a>
-  </nav>
+    <!-- Menú flotante -->
+    <nav id="navbar">
+      <div class="menu-icon" id="menu-icon">
+        <span>&#9776;</span>
+      </div>
+      <ul id="nav-list">
+        <li><a href="{{ url_for('main.index') }}" class="nav-button">Inicio</a></li>
+        <li><a href="#rendimiento" class="nav-button">Rendimiento</a></li>
+        <li><a href="#ia" class="nav-button">IA</a></li>
+        <li><a href="{{ url_for('main.config') }}" class="nav-button">Configuración</a></li>
+      </ul>
+      <a href="#" class="login-button" id="login-btn">Iniciar sesión</a>
+    </nav>
+  </header>
 
   <!-- Formulario flotante de inicio de sesión -->
   <div class="login-form" id="login-form">

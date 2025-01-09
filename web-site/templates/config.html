@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Configuración{% endblock %}
+
+{% block second_style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/config.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="group" id="materia-prima">
+  <h2>Materia Prima</h2>
+  <div class="card-container">
+    <div class="card">
+      <a href="{{ url_for('main.config_parameters', section='categories_resources') }}">
+        <h3>Categorías de Recursos</h3>
+      </a>
+    </div>
+    <div class="card">
+      <a href="{{ url_for('main.config_parameters', section='catalogue_resources') }}">
+        <h3>Catálogo de Recursos</h3>
+      </a>
+    </div>
+    <div class="card">
+      <a href="{{ url_for('main.config_parameters', section='supplier') }}">
+        <h3>Proveedores</h3>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="group" id="productos">
+  <h2>Productos</h2>
+  <div class="card-container">
+    <div class="card">
+      <a href="{{ url_for('main.config_parameters', section='categories_products') }}">
+        <h3>Categorías de Productos</h3>
+      </a>
+    </div>
+    <div class="card">
+      <a href="{{ url_for('main.config_parameters', section='catalogue_products') }}">
+        <h3>Catálogo de Productos</h3>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="group" id="produccion">
+  <h2>Producción</h2>
+  <div class="card-container">
+    <div class="card">
+      <a href="{{ url_for('main.config_parameters', section='factories') }}">
+        <h3>Fábricas</h3>
+      </a>
+    </div>
+    <div class="card">
+      <a href="{{ url_for('main.config_parameters', section='equipment') }}">
+        <h3>Equipo/Maquinaria</h3>
+      </a>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -2,7 +2,7 @@
 -- Tabla Categories_Resources
 CREATE TABLE Categories_Resources (
     ID SERIAL PRIMARY KEY,
-    Name_Category VARCHAR(255) NOT NULL
+    Name_Category VARCHAR(255) NOT NUL
 );
 
 -- Tabla Supplier
