@@ -13,6 +13,10 @@
   </section>
   <section class="content">
     <h3>Listado</h3>
+    <button type="button" class="button" id="add-item-button">
+        <span class="button__text">Add Item</span>
+        <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
+    </button>
     <table>
         <thead>
             <tr>
@@ -91,4 +95,23 @@
         </tbody>
     </table>
   </section>
+
+  <!-- Formulario flotante para agregar un ítem -->
+  <div id="form-overlay" class="overlay hidden">
+    <div class="form-container">
+      <form id="dynamic-form">
+        <h3>Agregar Nuevo Ítem</h3>
+        <!-- Aquí se agregarán los campos dinámicamente -->
+        <div id="form-fields"></div>
+        <button type="submit">Guardar</button>
+        <button type="button" id="cancel-button">Cancelar</button>
+      </form>
+    </div>
+  </div>
+  <script>
+    // Variable enviada desde Flask al cargar el sitio
+    const section = "{{ section }}";
+    const fields = "{{ fields|tojson }}";
+  </script>
+  <script src="{{ url_for('static', filename='js/config-parameters.js') }}"></script>
 {% endblock %}
