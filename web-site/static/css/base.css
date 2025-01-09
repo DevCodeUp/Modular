@@ -1,0 +1,136 @@
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+  
+html, body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+  
+/* Header */
+header {
+  background-color: #2b3e50;
+  color: #fff;
+  text-align: center;
+  padding-top: 30px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+ 
+  h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+  }
+  
+  p {
+    font-size: 1.2em;
+  }
+  
+  /* Navigation Menu */
+  nav {
+    background-color: #1f2d3d;
+    margin-top: 30px;
+
+    ul {
+      display: flex;
+      justify-content: center;
+      padding: 15px 0;
+
+      li {
+        list-style: none;
+
+        a {
+          color: #fff;
+          padding: 10px 20px;
+          margin: 0 10px;
+          text-decoration: none;
+          font-weight: 700;
+          border-radius: 5px;
+          transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        a:hover {
+          background-color: #eeee2d;
+          color: #000000;
+        }
+      }
+    }
+  }
+
+  /* Floating menu for smaller screens */
+  .menu-icon {
+    display: none;
+    font-size: 2em;
+    color: white;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    nav ul {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background-color: #1f2d3d;
+      width: 100%;
+      padding: 20px 0;
+
+      li {
+        text-align: center;
+        padding: 10px 0;
+      }
+    }
+
+    .menu-icon {
+      display: block;
+    }
+  }
+
+  nav ul.show {
+    display: flex;
+  }
+}
+/* Body */
+body {
+  font-family: 'Lato', sans-serif;
+  background-color: #f2f2f2;
+  color: #333;
+}
+    
+    
+      
+/* Footer */
+footer {
+  background-color: #1f2d3d;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  margin-top: auto;
+  /* Hace que el footer se mantenga abajo */
+  
+  p {
+    font-size: 0.9em;
+  }
+}
+    
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .content-section {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+    
+  .hero {
+    padding: 60px 20px;
+  
+    h2 {
+      font-size: 2em;
+    }
+  }
+}
