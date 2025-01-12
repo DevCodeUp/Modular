@@ -1,11 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Home</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>ERP Inteligente</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css')}}">
 </head>
+
 <body>
-    <h1>Welcome to my website!</h1>
-    <a href="/about">About</a>
+
+  <header>
+    <h1>ERP Inteligente para Fábricas</h1>
+    <p>Automatización y análisis avanzado para mejorar tu producción</p>
+
+    <!-- Menú flotante -->
+    <nav id="navbar">
+      <div class="menu-icon" id="menu-icon">
+        <span>&#9776;</span>
+      </div>
+      <ul id="nav-list">
+        <li><a href="{{ url_for('main.index') }}" class="nav-button">Inicio</a></li>
+        <li><a href="#rendimiento" class="nav-button">Rendimiento</a></li>
+        <li><a href="#ia" class="nav-button">IA</a></li>
+        <li><a href="{{ url_for('main.config') }}" class="nav-button">Configuración</a></li>
+      </ul>
+      <a href="#" class="login-button" id="login-btn">Iniciar sesión</a>
+    </nav>
+  </header>
+
+  <!-- Formulario flotante de inicio de sesión -->
+  <div class="login-form" id="login-form">
+    <form>
+      <h3>Iniciar Sesión</h3>
+      <label for="employee-number">Número de empleado</label>
+      <input type="text" id="employee-number" placeholder="Ingrese su número de empleado">
+
+      <label for="password">Contraseña</label>
+      <input type="password" id="password" placeholder="Ingrese su contraseña">
+
+      <button type="submit">Iniciar Sesión</button>
+      <button type="button" id="close-login">Cerrar</button>
+    </form>
+  </div>
+
+  <section class="hero">
+    <h2>Optimización y análisis inteligente para tu producción</h2>
+    <p>Aumenta la eficiencia y reduce los errores con el poder de la inteligencia artificial</p>
+  </section>
+
+  <section class="content">
+    <div class="content-section" id="calidad">
+      <h3>Calidad</h3>
+      <p>Visión artificial para inspeccionar y garantizar la calidad en la producción.</p>
+    </div>
+    <div class="content-section" id="rendimiento">
+      <h3>Rendimiento</h3>
+      <p>Monitorización de la productividad y análisis de cuellos de botella.</p>
+    </div>
+    <div class="content-section" id="ia">
+      <h3>Inteligencia Artificial</h3>
+      <p>Predicciones basadas en datos para optimizar la producción y mejorar la eficiencia.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>ERP Inteligente - Soluciones avanzadas para la industria. &copy; 2024</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/index.js')}}"></script>
+
 </body>
+
 </html>
