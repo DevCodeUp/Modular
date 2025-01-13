@@ -20,7 +20,10 @@ def config_parameters(section):
     'categories_products': 'Categorías de Productos',
     'catalogue_products': 'Catálogo de Productos',
     'factories': 'Fábricas',
-    'equipment': 'Equipo/Maquinaria'
+    'equipment': 'Equipo/Maquinaria',
+    'inventory': 'Materia Prima',
+    'store' : 'Producto en Proceso',
+    'production' : 'Producto Terminado'
   }
   title_section = titles.get(section, 'Gestión General')
 
@@ -31,7 +34,10 @@ def config_parameters(section):
     'categories_products': 'categories_products',
     'catalogue_products': 'products',
     'factories': 'factories',
-    'equipment': 'equipment'
+    'equipment': 'equipment',
+    'inventory' : 'inventory',
+    'store' : 'store',
+    'production' : 'production'
   }
   table = tables.get(section)
 
