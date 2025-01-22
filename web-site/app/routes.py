@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request, jsonify
 from .queries import get_table_data
+import json
 
 main = Blueprint('main', __name__)
 
@@ -35,50 +36,6 @@ def config_parameters(section):
   }
   table = tables.get(section)
 
-  fields_configuration = {
-    'categories_resources': [
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
-    ],
-    'catalogue_resources': [
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-    ],
-    'supplier': [
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-    ],
-    'categories_products': [
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
-    ],
-    'catalogue_products': [
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
-    ],
-    'factories':[
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
-    ],
-    'equipment':[
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
-    ]
-  }
-  fields = fields_configuration.get(section, [])
-
   if not table:
     return "Sección no válida", 404
 
@@ -92,6 +49,61 @@ def config_parameters(section):
     section=section,
     title_section=title_section,
     columns=columns,
-    data=data,
-    fields=fields
+    data=data
   )
+
+# Formulario de Configuración de parámetros
+@main.route('/get_form', methods=['POST'])
+def get_form():
+    data = request.json
+    form_type = data.get('form_type', 'default')
+
+    if form_type == 'categories_resources':
+      fields = [
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
+      ]
+    elif form_type == 'catalogue_resources':
+      fields = [
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
+      ]
+    elif form_type == 'supplier':
+      fields = [
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
+      ]
+    elif form_type == 'categories_products':
+      fields = [
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
+      ]
+    elif form_type == 'catalogue_products':
+      fields = [
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
+      ]
+    elif form_type == 'factories':
+      fields = [
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
+      ]
+    elif form_type == 'equipment':
+      fields = [
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
+      ]
+
+    return jsonify(fields)
