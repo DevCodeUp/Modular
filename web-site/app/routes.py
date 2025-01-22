@@ -20,6 +20,10 @@ def config_parameters(section):
     'categories_products': 'Categorías de Productos',
     'catalogue_products': 'Catálogo de Productos',
     'factories': 'Fábricas',
+    'equipment': 'Equipo/Maquinaria',
+    'inventory': 'Materia Prima',
+    'store' : 'Producto en Proceso',
+    'production' : 'Producto Terminado'
     'equipment': 'Equipo/Maquinaria'
   }
   title_section = titles.get(section, 'Gestión General')
@@ -31,6 +35,40 @@ def config_parameters(section):
     'categories_products': 'categories_products',
     'catalogue_products': 'products',
     'factories': 'factories',
+    'equipment': 'equipment',
+    'inventory' : 'inventory',
+    'store' : 'store',
+    'production' : 'production'
+  }
+  table = tables.get(section)
+
+
+@main.route('/config-parameters/mrp')
+def config_mrp():
+    title_section = "Gestión de MRP"
+    
+    # Configuración de las tablas para la gestión
+    tables = ['BOM', 'Production_Plan']
+    fields_configuration = {
+        'BOM': [
+            {'name': 'ID_Product', 'type': 'select', 'label': 'Producto', 'options': 'products'},
+            {'name': 'ID_Resource', 'type': 'select', 'label': 'Recurso', 'options': 'resources'},
+            {'name': 'Quantity', 'type': 'number', 'label': 'Cantidad'}
+        ],
+        'Production_Plan': [
+            {'name': 'ID_Product', 'type': 'select', 'label': 'Producto', 'options': 'products'},
+            {'name': 'Planned_Quantity', 'type': 'number', 'label': 'Cantidad Planeada'},
+            {'name': 'Start_Date', 'type': 'datetime-local', 'label': 'Fecha de Inicio'},
+            {'name': 'End_Date', 'type': 'datetime-local', 'label': 'Fecha de Finalización'}
+        ]
+    }
+
+    return render_template(
+        'config-mrp.html',
+        title_section=title_section,
+        tables=tables,
+        fields=fields_configuration
+    )
     'equipment': 'equipment'
   }
   table = tables.get(section)

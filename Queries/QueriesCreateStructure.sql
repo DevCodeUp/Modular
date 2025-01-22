@@ -139,6 +139,25 @@ CREATE TABLE Inventory_Log (
     Change_Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+
+--Bill of materials
+CREATE TABLE BOM (
+    ID SERIAL PRIMARY KEY,
+    ID_Product INTEGER NOT NULL REFERENCES Products(ID) ON DELETE CASCADE,
+    ID_Resource INTEGER NOT NULL REFERENCES Resources(ID) ON DELETE CASCADE,
+    Quantity FLOAT NOT NULL CHECK (Quantity > 0)
+);
+
+-- Plan de produccion
+CREATE TABLE Production_Plan (
+    ID SERIAL PRIMARY KEY,
+    ID_Product INTEGER NOT NULL REFERENCES Products(ID) ON DELETE CASCADE,
+    Planned_Quantity INTEGER NOT NULL CHECK (Planned_Quantity > 0),
+    Start_Date TIMESTAMP NOT NULL,
+    End_Date TIMESTAMP NOT NULL
+);
+
+
 -- INDICES
 CREATE INDEX idx_resources_name ON Resources(Name_Resource);
 CREATE INDEX idx_products_name ON Products(Name_Product);
@@ -214,6 +233,10 @@ GRANT sales_analyst_role TO sales_user;
 
 CREATE USER production_user WITH PASSWORD 'production_user_password';
 GRANT production_role TO production_user;
+
+-- INIDCE DE RECURSOS POR NOMBRE
+CREATE INDEX idx_resources_name ON Resources(Name_Resource);
+CREATE INDEX idx_orders_id_resource ON Orders(ID_Resource);
 
 
 
