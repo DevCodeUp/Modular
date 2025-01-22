@@ -24,6 +24,7 @@ def config_parameters(section):
     'inventory': 'Materia Prima',
     'store' : 'Producto en Proceso',
     'production' : 'Producto Terminado'
+    'equipment': 'Equipo/Maquinaria'
   }
   title_section = titles.get(section, 'Gestión General')
 
@@ -68,7 +69,9 @@ def config_mrp():
         tables=tables,
         fields=fields_configuration
     )
-
+    'equipment': 'equipment'
+  }
+  table = tables.get(section)
 
   fields_configuration = {
     'categories_resources': [
@@ -111,7 +114,6 @@ def config_mrp():
       {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
       {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
     ]
-
   }
   fields = fields_configuration.get(section, [])
 
