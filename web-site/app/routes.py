@@ -24,6 +24,8 @@ def config_parameters(section):
     'inventory': 'Materia Prima',
     'store' : 'Producto en Proceso',
     'production' : 'Producto Terminado'
+    'orders': 'Órdenes de Fabricación'
+
   }
   title_section = titles.get(section, 'Gestión General')
 
@@ -37,7 +39,9 @@ def config_parameters(section):
     'equipment': 'equipment',
     'inventory' : 'inventory',
     'store' : 'store',
-    'production' : 'production'
+    'production' : 'production',
+    'orders': 'manufacturing_orders'
+
   }
   table = tables.get(section)
 
@@ -59,7 +63,17 @@ def config_mrp():
             {'name': 'Planned_Quantity', 'type': 'number', 'label': 'Cantidad Planeada'},
             {'name': 'Start_Date', 'type': 'datetime-local', 'label': 'Fecha de Inicio'},
             {'name': 'End_Date', 'type': 'datetime-local', 'label': 'Fecha de Finalización'}
-        ]
+        ],
+
+         'orders': [
+            {'name': 'order_id', 'type': 'text', 'label': 'ID Orden'},
+            {'name': 'product_id', 'type': 'select', 'label': 'Producto', 'options': 'products'},
+            {'name': 'quantity', 'type': 'number', 'label': 'Cantidad'},
+            {'name': 'status', 'type': 'select', 'label': 'Estado', 'options': ['Pendiente', 'En Proceso', 'Completado']},
+            {'name': 'start_date', 'type': 'datetime-local', 'label': 'Fecha de Inicio'},
+            {'name': 'end_date', 'type': 'datetime-local', 'label': 'Fecha de Finalización'}
+]
+
     }
 
     return render_template(

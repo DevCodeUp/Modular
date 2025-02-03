@@ -103,6 +103,12 @@ body {
   color: #333;
 }
     
+
+#produccion .card:last-child {
+  background-color: #ffcc00;
+  color: #000;
+}
+
     
       
 /* Footer */
