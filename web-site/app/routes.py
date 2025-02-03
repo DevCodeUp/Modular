@@ -24,8 +24,12 @@ def config_parameters(section):
     'inventory': 'Materia Prima',
     'store' : 'Producto en Proceso',
     'production' : 'Producto Terminado'
+<<<<<<< HEAD
     'orders': 'Órdenes de Fabricación'
 
+=======
+    'equipment': 'Equipo/Maquinaria'
+>>>>>>> 5cba3ad9c97cd0f36a3d626b52ec4dd58b4345a0
   }
   title_section = titles.get(section, 'Gestión General')
 
@@ -72,7 +76,7 @@ def config_mrp():
             {'name': 'status', 'type': 'select', 'label': 'Estado', 'options': ['Pendiente', 'En Proceso', 'Completado']},
             {'name': 'start_date', 'type': 'datetime-local', 'label': 'Fecha de Inicio'},
             {'name': 'end_date', 'type': 'datetime-local', 'label': 'Fecha de Finalización'}
-]
+            ]
 
     }
 
@@ -82,7 +86,9 @@ def config_mrp():
         tables=tables,
         fields=fields_configuration
     )
-
+    'equipment': 'equipment'
+  }
+  table = tables.get(section)
 
   fields_configuration = {
     'categories_resources': [
@@ -125,7 +131,6 @@ def config_mrp():
       {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
       {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
     ]
-
   }
   fields = fields_configuration.get(section, [])
 

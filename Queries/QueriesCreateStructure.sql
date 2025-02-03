@@ -139,6 +139,7 @@ CREATE TABLE Inventory_Log (
     Change_Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+
 --Bill of materials
 CREATE TABLE BOM (
     ID SERIAL PRIMARY KEY,
@@ -155,7 +156,6 @@ CREATE TABLE Production_Plan (
     Start_Date TIMESTAMP NOT NULL,
     End_Date TIMESTAMP NOT NULL
 );
-
 
 
 -- INDICES
@@ -237,7 +237,6 @@ GRANT production_role TO production_user;
 -- INIDCE DE RECURSOS POR NOMBRE
 CREATE INDEX idx_resources_name ON Resources(Name_Resource);
 CREATE INDEX idx_orders_id_resource ON Orders(ID_Resource);
-
 
 
 
