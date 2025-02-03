@@ -2,7 +2,14 @@
 -- Tabla Categories_Resources
 CREATE TABLE Categories_Resources (
     ID SERIAL PRIMARY KEY,
-    Name_Category VARCHAR(255) NOT NUL
+    Name_Category VARCHAR(255) NOT NULL
+);
+
+-- Tabla Subcategories_Resources
+CREATE TABLE Subcategories_Resources (
+    ID SERIAL PRIMARY KEY,
+    Name_Subcategory VARCHAR(255) NOT NULL,
+    ID_Category INTEGER NOT NULL REFERENCES Categories_Resources(ID) ON DELETE CASCADE
 );
 
 -- Tabla Supplier
@@ -12,7 +19,7 @@ CREATE TABLE Supplier (
     Address TEXT NOT NULL,
     Lada INTEGER NOT NULL,
     Phone NUMERIC(10, 0) NOT NULL,
-	delivery_time INTEGER NOT NULL
+    delivery_time INTEGER NOT NULL
 );
 
 -- Tabla Resources
@@ -22,6 +29,7 @@ CREATE TABLE Resources (
     Description TEXT,
     Price FLOAT NOT NULL,
     ID_Category INTEGER NOT NULL REFERENCES Categories_Resources(ID),
+    ID_Subcategory INTEGER REFERENCES Subcategories_Resources(ID),
     ID_Supplier INTEGER NOT NULL REFERENCES Supplier(ID)
 );
 
@@ -41,13 +49,21 @@ CREATE TABLE Categories_Products (
     Name_Category VARCHAR(255) NOT NULL
 );
 
+-- Tabla Subcategories_Products
+CREATE TABLE Subcategories_Products (
+    ID SERIAL PRIMARY KEY,
+    Name_Subcategory VARCHAR(255) NOT NULL,
+    ID_Category INTEGER NOT NULL REFERENCES Categories_Products(ID) ON DELETE CASCADE
+);
+
 -- Tabla Products
 CREATE TABLE Products (
     ID SERIAL PRIMARY KEY,
     Name_Product VARCHAR(255) NOT NULL,
     Description TEXT,
     Price FLOAT NOT NULL,
-    ID_Category INTEGER NOT NULL REFERENCES Categories_Products(ID)
+    ID_Category INTEGER NOT NULL REFERENCES Categories_Products(ID),
+    ID_Subcategory INTEGER REFERENCES Subcategories_Products(ID)
 );
 
 -- Tabla Store
@@ -117,7 +133,7 @@ CREATE TABLE Equipment (
     Unit_Time VARCHAR(1) NOT NULL
 );
 
---Tabla production
+-- Tabla Production
 CREATE TABLE Production (
     ID SERIAL PRIMARY KEY,
     ID_Equipment INTEGER NOT NULL REFERENCES Equipment(ID),
@@ -128,7 +144,7 @@ CREATE TABLE Production (
     Unit_Time VARCHAR(1) NOT NULL
 );
 
---TABLAS SECUNDARIAS
+-- TABLAS SECUNDARIAS
 -- Tablas de Logs
 CREATE TABLE Inventory_Log (
     ID SERIAL PRIMARY KEY,
@@ -147,6 +163,8 @@ CREATE INDEX idx_orders_id_resource ON Orders(ID_Resource);
 CREATE INDEX idx_equipment_id_factory ON Equipment(ID_Factory);
 CREATE INDEX idx_equipment_id_product ON Equipment(ID_Product);
 CREATE INDEX idx_production_id_equipment ON Production(ID_Equipment);
+CREATE INDEX idx_subcategories_resources ON Subcategories_Resources(ID_Category);
+CREATE INDEX idx_subcategories_products ON Subcategories_Products(ID_Category);
 
 -- VISTAS
 -- Ventas Totales
@@ -157,8 +175,8 @@ SELECT
 FROM Sales
 GROUP BY ID_Product;
 
--- TRIGERS
---Inventory
+-- TRIGGERS
+-- Inventory
 CREATE OR REPLACE FUNCTION log_inventory_changes()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -171,7 +189,6 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER inventory_update_trigger
 AFTER UPDATE ON Inventory
 FOR EACH ROW EXECUTE FUNCTION log_inventory_changes();
-
 
 -- ROLES
 -- Crear el rol de administrador con control total
@@ -197,7 +214,7 @@ GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO admin_role;
 -- Analista de ventas
 GRANT SELECT ON Sales, Products TO sales_analyst_role;
 GRANT SELECT ON Categories_Products TO sales_analyst_role;
-GRANT SELECT ON salessummary TO sales_analyst_role;
+GRANT SELECT ON SalesSummary TO sales_analyst_role;
 
 -- Operador de Producción
 GRANT SELECT ON Resources, Inventory, Products, Production TO production_role;
@@ -214,10 +231,5 @@ GRANT sales_analyst_role TO sales_user;
 
 CREATE USER production_user WITH PASSWORD 'production_user_password';
 GRANT production_role TO production_user;
-
-
-
-
-
 
 

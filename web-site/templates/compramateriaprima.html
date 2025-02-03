@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compra de Materia Prima</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Gestión de Compras de Materia Prima</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="materiales.html">Materiales</a></li>
+                    <li><a href="proveedores.html">Proveedores</a></li>
+                    <li><a href="compraMateriaPrima.html" class="active">Compras</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <button id="add-compra-btn">Agregar Compra</button>
+            <div class="content">
+                <table id="compras-table">
+                    <thead>
+                        <tr>
+                            <th>No. Compra</th>
+                            <th>Materia Prima</th>
+                            <th>Proveedor</th>
+                            <th>Cantidad</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Compras se agregarán dinámicamente aquí -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2025 Gestión de Almacén</p>
+    </footer>
+
+    <script src="scriptCompra.js"></script>
+</body>
+</html>
