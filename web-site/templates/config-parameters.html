@@ -96,6 +96,55 @@
     </table>
   </section>
 
+  <!-- Agregar Chart.js desde CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title_section }}</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <h1>{{ title_section }}</h1>
+    <div id="chart-container">
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <script>
+        // Aquí tomamos los datos desde Python y los convertimos a JSON
+        var data = JSON.parse('{{ data | safe }}');
+
+        // Ejemplo de cómo puedes usar los datos para crear una gráfica
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar', // Tipo de gráfica (puedes cambiarlo a 'line', 'pie', etc.)
+            data: {
+                labels: data.labels, // Etiquetas de los ejes (deberías tenerlas en 'data')
+                datasets: [{
+                    label: 'Dataset', // Etiqueta de la gráfica
+                    data: data.values, // Valores de la gráfica (deberías tenerlos en 'data')
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
+
   <!-- Formulario flotante para agregar un ítem -->
   <div id="form-overlay" class="overlay hidden">
     <div class="form-container">

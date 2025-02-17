@@ -69,3 +69,5 @@ def get_table_data(section):
     finally:
         if connection:
             release_db_connection(connection)
+
+            

@@ -49,6 +49,17 @@ def config_parameters(section):
   }
   table = tables.get(section)
 
+columns, data = get_table_data(section)  # Esto obtiene los datos en la BD
+
+# Esto pasa los datos a las columnas en HTML 
+return render_template(
+    'config-parameters.html',
+    section=section,
+    title_section=title_section,
+    columns=columns,
+    data=data
+)
+
 
 @main.route('/config-parameters/mrp')
 def config_mrp():
@@ -76,7 +87,7 @@ def config_mrp():
             {'name': 'status', 'type': 'select', 'label': 'Estado', 'options': ['Pendiente', 'En Proceso', 'Completado']},
             {'name': 'start_date', 'type': 'datetime-local', 'label': 'Fecha de Inicio'},
             {'name': 'end_date', 'type': 'datetime-local', 'label': 'Fecha de Finalización'}
-            ]
+        ]
 
     }
 
@@ -87,7 +98,7 @@ def config_mrp():
         fields=fields_configuration
     )
     'equipment': 'equipment'
-  }
+  
   table = tables.get(section)
 
   fields_configuration = {
