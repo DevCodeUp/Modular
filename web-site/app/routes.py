@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, request, jsonify
 from .queries import get_table_data
-import json
 
 main = Blueprint('main', __name__)
 
@@ -12,6 +11,18 @@ def index():
 def config():
   return render_template('config.html')
 
+@main.route('/materia-prima')
+def materia_prima():
+  return render_template('materia_prima.html')
+
+@main.route('/stadistics')
+def stadistics():
+  return render_template('stadistics.html')
+
+@main.route('/production-order')
+def production_orders():
+  return render_template('production_orders.html')
+
 @main.route('/config-parameters/<string:section>')
 def config_parameters(section):
   titles = {
@@ -21,6 +32,10 @@ def config_parameters(section):
     'categories_products': 'Categorías de Productos',
     'catalogue_products': 'Catálogo de Productos',
     'factories': 'Fábricas',
+    'equipment': 'Equipo/Maquinaria',
+    'inventory': 'Materia Prima',
+    'store' : 'Producto en Proceso',
+    'production' : 'Producto Terminado',
     'equipment': 'Equipo/Maquinaria'
   }
   title_section = titles.get(section, 'Gestión General')
@@ -32,7 +47,10 @@ def config_parameters(section):
     'categories_products': 'categories_products',
     'catalogue_products': 'products',
     'factories': 'factories',
-    'equipment': 'equipment'
+    'equipment': 'equipment',
+    'inventory' : 'inventory',
+    'store' : 'store',
+    'production' : 'production'
   }
   table = tables.get(section)
 
@@ -40,7 +58,7 @@ def config_parameters(section):
     return "Sección no válida", 404
 
   try:
-    columns, data = get_table_data(section)
+    df = get_table_data(section)
   except Exception as e:
     return f"Error al obtener los datos: {e}", 500
   
@@ -48,8 +66,8 @@ def config_parameters(section):
     'config-parameters.html',
     section=section,
     title_section=title_section,
-    columns=columns,
-    data=data
+    columns=df.columns,
+    data=df.values
   )
 
 # Formulario de Configuración de parámetros
