@@ -1,19 +1,15 @@
-import os
 from flask import Flask
-from app import routes  # Asegúrate de que routes está correctamente importado
- 
+from app.routes import main  # Importar correctamente el Blueprint
+
 def create_app():
-  # Usa la ruta relativa basada en el archivo actual
-  app = Flask(__name__, template_folder=os.path.join(os.path.dirname(__file__), 'templates'))
+    app = Flask(__name__)  # No es necesario especificar template_folder
     
-  # Registra las rutas del blueprint (asegúrate de que 'routes.main' es un blueprint)
-  app.register_blueprint(routes.main)
+    # Registrar el Blueprint correctamente
+    app.register_blueprint(main)
     
-  return app
- 
-# Crea la aplicación
+    return app
+
 app = create_app()
- 
-# Ejecuta la aplicación si este archivo es el principal
+
 if __name__ == "__main__":
-  app.run(debug=True)
+    app.run(debug=True)

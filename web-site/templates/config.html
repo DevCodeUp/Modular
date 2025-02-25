@@ -67,12 +67,11 @@
         <h3>Equipo/Maquinaria</h3>
       </a>
     </div>
-  </div>
-  <div class="card">
-    <a href="{{ url_for('main.config_parameters', section='production') }}">
-      <h3>Producto en Proceso</h3>
-    </a>
-  </div>
+    <div class="card">
+      <a href="{{ url_for('main.config_parameters', section='production') }}">
+        <h3>Producto en Proceso</h3>
+      </a>
+    </div>
   </div>
 </section>
 
@@ -89,14 +88,11 @@
         <h3>Plan de Producción</h3>
       </a>
     </div>
+    <div class="card">
+      <a href="{{ url_for('main.config_parameters', section='orders') }}">
+        <h3>Órdenes de Fabricación</h3>
+      </a>
+    </div>
   </div>
-
-  <div class="card">
-    <a href="{{ url_for('main.config_parameters', section='orders') }}">
-      <h3>Órdenes de Fabricación</h3>
-    </a>
-  </div>
-  
-</section>
 </section>
 {% endblock %}
