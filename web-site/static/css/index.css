@@ -289,4 +289,12 @@ footer {
       font-size: 2em;
     }
   }
+
+  /* Ajustes para la gráfica de rendimiento */
+#chartRendimiento {
+  width: 100%;
+  max-width: 500px;
+  margin: 20px auto;
+}
+
 }
