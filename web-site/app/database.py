@@ -1,4 +1,4 @@
-from psycopg2 import pool
+rom psycopg2 import pool
 
 # Configuración para el pool de conexiones
 db_pool = pool.SimpleConnectionPool(

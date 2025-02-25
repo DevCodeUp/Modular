@@ -70,4 +70,3 @@ def get_table_data(section):
         if connection:
             release_db_connection(connection)
 
-            

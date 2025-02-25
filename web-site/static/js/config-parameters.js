@@ -11,12 +11,12 @@ const cancelButton = document.getElementById('cancel-button');
 addItemButton.addEventListener('click', () => {
     alert(fields);
     // Generar los campos dinámicamente desde la variable "fields"
-    //formFields.innerHTML = fields.map(field => `
+    //formFields.innerHTML = fields.map(field => 
     //    <div class="form-field">
     //        <label for="${field.name}">${field.label}:</label>
     //        <input type="${field.type || 'text'}" id="${field.name}" name="${field.name}" placeholder="${field.label}" required>
     //    </div>
-    //`).join('');
+    //).join('');
 
     // Mostrar el formulario flotante
     //formOverlay.classList.remove('hidden');

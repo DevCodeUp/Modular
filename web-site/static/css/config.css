@@ -1,60 +1,59 @@
 /* Main groups */
 .group {
-    margin: 40px auto;
-    padding: 20px;
-    text-align: center;
-  }
-  
-  .group h2 {
-    font-size: 1.8em;
-    margin-bottom: 20px;
-    color: #2b3e50;
-    text-transform: uppercase;
-  }
-  
-  /* Card container */
+  margin: 40px auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.group h2 {
+  font-size: 1.8em;
+  margin-bottom: 20px;
+  color: #2b3e50;
+  text-transform: uppercase;
+}
+
+/* Card container */
+.card-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Individual cards */
+.card {
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  width: 250px;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card a {
+  text-decoration: none;
+  color: #2b3e50;
+  font-size: 1.2em;
+  font-weight: bold;
+  text-align: center;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
   .card-container {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
+    flex-direction: column;
   }
-  
-  /* Individual cards */
+
   .card {
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-    width: 250px;
-    height: 150px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 90%;
+    margin: 0 auto;
   }
-  
-  .card a {
-    text-decoration: none;
-    color: #2b3e50;
-    font-size: 1.2em;
-    font-weight: bold;
-    text-align: center;
-  }
-  
-  .card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-  }
-  
-  /* Responsive design */
-  @media (max-width: 768px) {
-    .card-container {
-      flex-direction: column;
-    }
-  
-    .card {
-      width: 90%;
-      margin: 0 auto;
-    }
-  }
-  
+}

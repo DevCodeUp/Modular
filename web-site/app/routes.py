@@ -5,66 +5,68 @@ main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
-    return render_template('index.html')
+  return render_template('index.html')
 
 @main.route('/config')
 def config():
-    return render_template('config.html')
+  return render_template('config.html')
 
 @main.route('/config-parameters/<string:section>')
 def config_parameters(section):
-    titles = {
-        'categories_resources': 'Categorías de Recursos',
-        'catalogue_resources': 'Catálogo de recursos',
-        'supplier': 'Proveedores',
-        'categories_products': 'Categorías de Productos',
-        'catalogue_products': 'Catálogo de Productos',
-        'factories': 'Fábricas',
-        'equipment': 'Equipo/Maquinaria',
-        'inventory': 'Materia Prima',
-        'store': 'Producto en Proceso',
-        'production': 'Producto Terminado',
-        'orders': 'Órdenes de Fabricación'
-    }
-    
-    tables = {
-        'categories_resources': 'categories_resources',
-        'catalogue_resources': 'resources',
-        'supplier': 'supplier',
-        'categories_products': 'categories_products',
-        'catalogue_products': 'products',
-        'factories': 'factories',
-        'equipment': 'equipment',
-        'inventory': 'inventory',
-        'store': 'store',
-        'production': 'production',
-        'orders': 'manufacturing_orders'
-    }
-    
-    title_section = titles.get(section, 'Gestión General')
-    table = tables.get(section)
-    
-    if not table:
-        return "Sección no válida", 404
-    
-    try:
-        columns, data = get_table_data(section)
-    except Exception as e:
-        return f"Error al obtener los datos: {e}", 500
-    
-    return render_template(
-        'config-parameters.html',
-        section=section,
-        title_section=title_section,
-        columns=columns,
-        data=data
-    )
+  titles = {
+    'categories_resources': 'Categorías de Recursos',
+    'catalogue_resources': 'Catálogo de recursos',
+    'supplier': 'Proveedores',
+    'categories_products': 'Categorías de Productos',
+    'catalogue_products': 'Catálogo de Productos',
+    'factories': 'Fábricas',
+    'equipment': 'Equipo/Maquinaria',
+    'inventory': 'Materia Prima',
+    'store' : 'Producto en Proceso',
+    'production' : 'Producto Terminado'
+<<<<<<< HEAD
+    'orders': 'Órdenes de Fabricación'
+
+=======
+    'equipment': 'Equipo/Maquinaria'
+>>>>>>> 5cba3ad9c97cd0f36a3d626b52ec4dd58b4345a0
+  }
+  title_section = titles.get(section, 'Gestión General')
+
+  tables = {
+    'categories_resources': 'categories_resources',
+    'catalogue_resources': 'resources',
+    'supplier': 'supplier',
+    'categories_products': 'categories_products',
+    'catalogue_products': 'products',
+    'factories': 'factories',
+    'equipment': 'equipment',
+    'inventory' : 'inventory',
+    'store' : 'store',
+    'production' : 'production',
+    'orders': 'manufacturing_orders'
+
+  }
+  table = tables.get(section)
+
+columns, data = get_table_data(section)  # Esto obtiene los datos en la BD
+
+# Esto pasa los datos a las columnas en HTML 
+return render_template(
+    'config-parameters.html',
+    section=section,
+    title_section=title_section,
+    columns=columns,
+    data=data
+)
+
 
 @main.route('/config-parameters/mrp')
 def config_mrp():
     title_section = "Gestión de MRP"
     
-    tables = ['BOM', 'Production_Plan', 'orders']
+    # Configuración de las tablas para la gestión
+    tables = ['BOM', 'Production_Plan']
     fields_configuration = {
         'BOM': [
             {'name': 'ID_Product', 'type': 'select', 'label': 'Producto', 'options': 'products'},
@@ -77,7 +79,8 @@ def config_mrp():
             {'name': 'Start_Date', 'type': 'datetime-local', 'label': 'Fecha de Inicio'},
             {'name': 'End_Date', 'type': 'datetime-local', 'label': 'Fecha de Finalización'}
         ],
-        'orders': [
+
+         'orders': [
             {'name': 'order_id', 'type': 'text', 'label': 'ID Orden'},
             {'name': 'product_id', 'type': 'select', 'label': 'Producto', 'options': 'products'},
             {'name': 'quantity', 'type': 'number', 'label': 'Cantidad'},
@@ -85,11 +88,76 @@ def config_mrp():
             {'name': 'start_date', 'type': 'datetime-local', 'label': 'Fecha de Inicio'},
             {'name': 'end_date', 'type': 'datetime-local', 'label': 'Fecha de Finalización'}
         ]
+
     }
-    
+
     return render_template(
-        'config-parameters.html',
+        'config-mrp.html',
         title_section=title_section,
         tables=tables,
         fields=fields_configuration
     )
+    'equipment': 'equipment'
+  
+  table = tables.get(section)
+
+  fields_configuration = {
+    'categories_resources': [
+      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
+    ],
+    'catalogue_resources': [
+      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+    ],
+    'supplier': [
+      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+    ],
+    'categories_products': [
+      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
+    ],
+    'catalogue_products': [
+      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
+    ],
+    'factories':[
+      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
+    ],
+    'equipment':[
+      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
+    ]
+  }
+  fields = fields_configuration.get(section, [])
+
+  if not table:
+    return "Sección no válida", 404
+
+  try:
+    columns, data = get_table_data(section)
+  except Exception as e:
+    return f"Error al obtener los datos: {e}", 500
+  
+  return render_template(
+    'config-parameters.html',
+    section=section,
+    title_section=title_section,
+    columns=columns,
+    data=data,
+    fields=fields
+  )
