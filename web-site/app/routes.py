@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request, jsonify
 from .queries import get_table_data
 
 main = Blueprint('main', __name__)
@@ -10,6 +10,18 @@ def index():
 @main.route('/config')
 def config():
   return render_template('config.html')
+
+@main.route('/materia-prima')
+def materia_prima():
+  return render_template('materia_prima.html')
+
+@main.route('/stadistics')
+def stadistics():
+  return render_template('stadistics.html')
+
+@main.route('/production-order')
+def production_orders():
+  return render_template('production_orders.html')
 
 @main.route('/config-parameters/<string:section>')
 def config_parameters(section):
@@ -24,12 +36,8 @@ def config_parameters(section):
     'inventory': 'Materia Prima',
     'store' : 'Producto en Proceso',
     'production' : 'Producto Terminado'
-<<<<<<< HEAD
     'orders': 'Órdenes de Fabricación'
-
-=======
     'equipment': 'Equipo/Maquinaria'
->>>>>>> 5cba3ad9c97cd0f36a3d626b52ec4dd58b4345a0
   }
   title_section = titles.get(section, 'Gestión General')
 
@@ -44,21 +52,27 @@ def config_parameters(section):
     'inventory' : 'inventory',
     'store' : 'store',
     'production' : 'production',
-    'orders': 'manufacturing_orders'
+    'orders': 'orders'
 
   }
   table = tables.get(section)
+  
+  if not table:
+    return "Sección no válida", 404
 
-columns, data = get_table_data(section)  # Esto obtiene los datos en la BD
-
-# Esto pasa los datos a las columnas en HTML 
-return render_template(
+  try:
+    df = get_table_data(section)
+  except Exception as e:
+    return f"Error al obtener los datos: {e}", 500
+  
+  return render_template(
     'config-parameters.html',
     section=section,
     title_section=title_section,
-    columns=columns,
-    data=data
-)
+    columns=df.columns,
+    data=df.values
+  )
+
 
 
 @main.route('/config-parameters/mrp')
@@ -97,67 +111,60 @@ def config_mrp():
         tables=tables,
         fields=fields_configuration
     )
-    'equipment': 'equipment'
   
-  table = tables.get(section)
 
-  fields_configuration = {
-    'categories_resources': [
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
-    ],
-    'catalogue_resources': [
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-    ],
-    'supplier': [
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-    ],
-    'categories_products': [
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
-    ],
-    'catalogue_products': [
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
-    ],
-    'factories':[
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
-    ],
-    'equipment':[
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-      {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
-    ]
-  }
-  fields = fields_configuration.get(section, [])
+# Formulario de Configuración de parámetros
+@main.route('/get_form', methods=['POST'])
+def get_form():
+    data = request.json
+    form_type = data.get('form_type', 'default')
 
-  if not table:
-    return "Sección no válida", 404
+    if form_type == 'categories_resources':
+      fields = [
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
+      ]
+    elif form_type == 'catalogue_resources':
+      fields = [
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
+      ]
+    elif form_type == 'supplier':
+      fields = [
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
+      ]
+    elif form_type == 'categories_products':
+      fields = [
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
+      ]
+    elif form_type == 'catalogue_products':
+      fields = [
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
+      ]
+    elif form_type == 'factories':
+      fields = [
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
+      ]
+    elif form_type == 'equipment':
+      fields = [
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
+        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
+      ]
 
-  try:
-    columns, data = get_table_data(section)
-  except Exception as e:
-    return f"Error al obtener los datos: {e}", 500
-  
-  return render_template(
-    'config-parameters.html',
-    section=section,
-    title_section=title_section,
-    columns=columns,
-    data=data,
-    fields=fields
-  )
+    return jsonify(fields)

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Materia prima{% endblock %}
+
+{% block second_style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/materia_prima.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <button id="add-compra-btn">Agregar Orden</button>
+  <div class="content">
+    <table id="compras-table">
+      <thead>
+        <tr>
+          <th>No. Orden</th>
+          <th>Producto</th>
+          <th>Cantidad esperada</th>
+          <th>Cantidad Real</th>
+          <th>Tiempo planeado</th>
+          <th>Tiempo real</th>
+          <th>Porcentaje de cumplimiento</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Compras se agregarán dinámicamente aquí -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/materia_prima.js') }}"></script>
+{% endblock %}

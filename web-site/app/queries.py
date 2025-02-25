@@ -1,4 +1,6 @@
-from .database import get_db_connection, release_db_connection
+from .database import get_db_connection, close_db_connection
+import ibm_db_dbi
+import pandas as pd
 
 def get_table_data(section):
     """
@@ -14,18 +16,30 @@ def get_table_data(section):
     """,
     'catalogue_resources': 
     """
-    SELECT res.id AS "ID", res.name_resource AS "Recurso", res.description AS "Descripción",
-    CONCAT('$', TO_CHAR(res.price, 'FM999,999,999.00')) AS "Precio",
-    cat.name_category AS "Categoría", sup.name_supplier AS "Proveedor"
+    SELECT 
+    res.id AS "ID",
+    res.name_resource AS "Recurso",
+    res.description AS "Descripción",
+    '$' || TRIM(CHAR(DECIMAL(res.price, 10, 2))) AS "Precio",
+    cat.name_category AS "Categoría",
+    sup.name_supplier AS "Proveedor"
     FROM resources res
     INNER JOIN categories_resources cat ON res.id_category = cat.id
-    INNER JOIN supplier sup ON res.id_supplier = sup.id
+    INNER JOIN supplier sup ON res.id_supplier = sup.id;
     """,
     'supplier': 
     """
     SELECT id AS "ID", name_supplier AS "Proveedor", address AS "Dirección",
-    lada AS "Lada", phone AS "Teléfono", email AS "Email", delivery_time AS "Tiempo de distribución (Días)"
+    lada AS "Lada", phone AS "Teléfono", delivery_time AS "Tiempo de distribución (Días)"
     FROM supplier
+    """,
+    'inventory': 
+    """
+    SELECT inv.id AS "ID", re.name_resource AS "Nombre del producto",
+    inv.no_lot AS "Número de lote", inv.stock AS "Stock", inv.minimum_stock AS "Stock mínimo",
+    inv.expiration_date AS "Fecha de caducidad"
+    FROM inventory inv
+    INNER JOIN resources re ON inv.id_resource = re.id
     """,
     'categories_products': 
     """
@@ -33,9 +47,13 @@ def get_table_data(section):
     """,
     'catalogue_products': 
     """
-    SELECT pr.id AS "ID", pr.name_product AS "Producto", pr.description AS "Descripción",
-    CONCAT('$', TO_CHAR(pr.price, 'FM999,999,999.00')) AS "Precio",
-    cat.name_category AS "Categoría"  FROM products pr
+    SELECT 
+    pr.id AS "ID",
+    pr.name_product AS "Producto",
+    pr.description AS "Descripción",
+    '$' || TRIM(CHAR(DECIMAL(pr.price, 10, 2))) AS "Precio",
+    cat.name_category AS "Categoría"
+    FROM products pr
     INNER JOIN categories_products cat ON pr.id_category = cat.id
     """,
     'factories': 
@@ -46,27 +64,37 @@ def get_table_data(section):
     """,
     'equipment': 
     """
-    SELECT equ.id AS "ID", fac.name AS "Fábrica", pr.name_product AS "Producto Producido",
-    equ.name AS "Máquina/Equipo", CONCAT(TO_CHAR(equ.min_prod, 'FM999,999,999'), ' ', equ.unit_measure) AS "Mínimo de Producción",
-    CONCAT(TO_CHAR(equ.time, 'FM999,999,999'), ' ', equ.unit_time) AS "Tiempo Necesario de Producción"
+    SELECT 
+    equ.id AS "ID",
+    fac.name AS "Fábrica",
+    pr.name_product AS "Producto Producido",
+    equ.name AS "Máquina/Equipo",
+    TRIM(CHAR(DECIMAL(equ.min_prod, 10, 0))) || ' ' || equ.unit_measure AS "Mínimo de Producción",
+    TRIM(CHAR(DECIMAL(equ.time, 10, 0))) || ' ' || equ.unit_time AS "Tiempo Necesario de Producción"
     FROM equipment equ
     INNER JOIN factories fac ON equ.id_factory = fac.id
-    INNER JOIN products pr ON equ.id_product = pr.id
+    INNER JOIN products pr ON equ.id_product = pr.id;
     """
     }
 
     try:
         connection = get_db_connection()
-        cursor = connection.cursor()
         query = queries.get(section)
-        cursor.execute(query)
-        data = cursor.fetchall()
-        columns = [desc[0] for desc in cursor.description]
-        cursor.close()
-        return columns, data
+        if not query:
+            raise ValueError(f"Consulta no encontrada para la sección: {section}")
+        conn_dbi = ibm_db_dbi.Connection(connection)
+        df = pd.read_sql(query, conn_dbi)
+        return df
     except Exception as e:
-        raise Exception(f"Error al consultar la tabla: {e}")
+        raise Exception(f"Error en la consulta: {e}")
+        return pd.DataFrame()  # Retornar un DataFrame vacío si hay error
+    except ValueError as ve:
+        raise Exception(f"Error en la consulta: {ve}")
     finally:
         if connection:
+<<<<<<< HEAD
             release_db_connection(connection)
 
+=======
+            close_db_connection(connection)
+>>>>>>> d04b8e0b09ca5919f0d5357678964a2c1c316b47

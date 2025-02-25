@@ -152,7 +152,6 @@
   <script>
     // Variable enviada desde Flask al cargar el sitio
     const section = "{{ section }}";
-    const fields = "{{ fields|tojson }}";
   </script>
   <script src="{{ url_for('static', filename='js/config-parameters.js') }}"></script>
 {% endblock %}
