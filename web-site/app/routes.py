@@ -36,7 +36,8 @@ def config_parameters(section):
     'inventory': 'Materia Prima',
     'store' : 'Producto en Proceso',
     'production' : 'Producto Terminado',
-    'orders': 'Órdenes de Fabricación'
+    'orders': 'Órdenes de Fabricación',
+    'equipment': 'Equipo/Maquinaria'
   }
   title_section = titles.get(section, 'Gestión General')
 
