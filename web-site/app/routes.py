@@ -36,7 +36,6 @@ def config_parameters(section):
     'inventory': 'Materia Prima',
     'store' : 'Producto en Proceso',
     'production' : 'Producto Terminado',
-    'orders': 'Órdenes de Fabricación',
     'equipment': 'Equipo/Maquinaria'
   }
   title_section = titles.get(section, 'Gestión General')
@@ -51,12 +50,10 @@ def config_parameters(section):
     'equipment': 'equipment',
     'inventory' : 'inventory',
     'store' : 'store',
-    'production' : 'production',
-    'orders': 'orders'
-
+    'production' : 'production'
   }
   table = tables.get(section)
-  
+
   if not table:
     return "Sección no válida", 404
 
@@ -72,46 +69,6 @@ def config_parameters(section):
     columns=df.columns,
     data=df.values
   )
-
-
-
-@main.route('/config-parameters/mrp')
-def config_mrp():
-    title_section = "Gestión de MRP"
-    
-    # Configuración de las tablas para la gestión
-    tables = ['BOM', 'Production_Plan']
-    fields_configuration = {
-        'BOM': [
-            {'name': 'ID_Product', 'type': 'select', 'label': 'Producto', 'options': 'products'},
-            {'name': 'ID_Resource', 'type': 'select', 'label': 'Recurso', 'options': 'resources'},
-            {'name': 'Quantity', 'type': 'number', 'label': 'Cantidad'}
-        ],
-        'Production_Plan': [
-            {'name': 'ID_Product', 'type': 'select', 'label': 'Producto', 'options': 'products'},
-            {'name': 'Planned_Quantity', 'type': 'number', 'label': 'Cantidad Planeada'},
-            {'name': 'Start_Date', 'type': 'datetime-local', 'label': 'Fecha de Inicio'},
-            {'name': 'End_Date', 'type': 'datetime-local', 'label': 'Fecha de Finalización'}
-        ],
-
-         'orders': [
-            {'name': 'order_id', 'type': 'text', 'label': 'ID Orden'},
-            {'name': 'product_id', 'type': 'select', 'label': 'Producto', 'options': 'products'},
-            {'name': 'quantity', 'type': 'number', 'label': 'Cantidad'},
-            {'name': 'status', 'type': 'select', 'label': 'Estado', 'options': ['Pendiente', 'En Proceso', 'Completado']},
-            {'name': 'start_date', 'type': 'datetime-local', 'label': 'Fecha de Inicio'},
-            {'name': 'end_date', 'type': 'datetime-local', 'label': 'Fecha de Finalización'}
-        ]
-
-    }
-
-    return render_template(
-        'config-mrp.html',
-        title_section=title_section,
-        tables=tables,
-        fields=fields_configuration
-    )
-  
 
 # Formulario de Configuración de parámetros
 @main.route('/get_form', methods=['POST'])
