@@ -5,11 +5,10 @@ const parameter = section;
 const addItemButton = document.getElementById('add-item-button');
 const formOverlay = document.getElementById('form-overlay');
 const formFields = document.getElementById('form-fields');
-const cancelButton = document.getElementById('cancel-button');
+const cancelButton = document.getElementById('close-form');
 
 // Mostrar formulario flotante al presionar el botón
 addItemButton.addEventListener('click', () => {
-    fetchForm(parameter); // Cargar campos de formulario dinámico
     formOverlay.classList.remove('hidden');
 });
 
@@ -18,39 +17,47 @@ cancelButton.addEventListener('click', () => {
     formOverlay.classList.add('hidden');
 });
 
-// Función para cargar los campos dinámicos del formulario
-function fetchForm(formType) {
-    fetch('/get_form', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ form_type: formType })
-    })
-    .then(response => response.json())
-    .then(fields => {
-        formFields.innerHTML = ''; // Limpiar campos anteriores
-        fields.forEach(field => {
-            // Crear label
-            const label = document.createElement('label');
-            label.htmlFor = field.name; // Relacionar el label con el input
-            label.textContent = field.label; // Usar 'label' del servidor o el nombre del campo
-            formFields.appendChild(label);
-
-            // Crear input
-            const input = document.createElement('input');
-            
-            input.name = field.name;
-            input.type = field.type;
-            input.placeholder = field.label;
-            input.required = true;
-            formFields.appendChild(input);
-            formFields.appendChild(document.createElement('br'));
-        });
-    });
+function confirmDelete(itemId) {
+    let confirmAction = confirm("¿Estás seguro de que deseas eliminar este elemento?");
+    
+    if (confirmAction) {
+      document.getElementById(`delete-form-${itemId}`).submit();
+    } else {
+      alert("Operación cancelada.");
+    }
 }
 
-// Manejar el envío del formulario
-document.getElementById('dynamic-form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    alert('Formulario enviado');
-    formOverlay.classList.add('hidden');
-});
+// Abre el formulario de edición y llena los campos con los datos actuales
+function openEditForm(itemId, rowData) {
+    document.getElementById("edit-form-overlay").classList.remove("hidden");
+    
+    // Llenar los campos con los valores de la fila seleccionada
+    document.getElementById("edit-id").value = itemId;
+    
+    let keys = Object.keys(rowData);
+    for (let i = 1; i < keys.length; i++) {  // Empieza en 1 para omitir ID
+      let colName = keys[i];
+      let colValue = rowData[colName];
+
+      let inputField = document.getElementById("edit-" + colName);
+      if (inputField) {
+        inputField.value = colValue;
+      }
+    }
+}
+
+// Cierra el formulario de edición
+function closeEditForm() {
+    document.getElementById("edit-form-overlay").classList.add("hidden");
+}
+
+// Confirma la edición y envía los datos
+function confirmEdit() {
+    let confirmAction = confirm("¿Estás seguro de que deseas actualizar este elemento?");
+    
+    if (confirmAction) {
+      document.getElementById("edit-form").submit();
+    } else {
+      alert("Operación cancelada.");
+    }
+}

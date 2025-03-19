@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, request, jsonify
-from .queries import get_table_data
+from flask import Blueprint, render_template, request, redirect, url_for
+from .queries import *
 
 main = Blueprint('main', __name__)
 
@@ -34,9 +34,8 @@ def config_parameters(section):
     'factories': 'Fábricas',
     'equipment': 'Equipo/Maquinaria',
     'inventory': 'Materia Prima',
-    'store' : 'Producto en Proceso',
-    'production' : 'Producto Terminado',
-    'equipment': 'Equipo/Maquinaria'
+    'store' : 'Producto Terminado',
+    'production' : 'Producción en proceso'
   }
   title_section = titles.get(section, 'Gestión General')
 
@@ -59,69 +58,84 @@ def config_parameters(section):
 
   try:
     df = get_table_data(section)
+    df2 = get_table_columns(table)
+    options_dictionary = getAllOptions(table)
   except Exception as e:
     return f"Error al obtener los datos: {e}", 500
+  
   
   return render_template(
     'config-parameters.html',
     section=section,
     title_section=title_section,
     columns=df.columns,
-    data=df.values
+    data=df.values.tolist(),
+    id_columns=df2.values.tolist(),
+    options_dictionary=options_dictionary,
+    table=table
   )
 
-# Formulario de Configuración de parámetros
-@main.route('/get_form', methods=['POST'])
-def get_form():
-    data = request.json
-    form_type = data.get('form_type', 'default')
+@main.route('/save-data/<string:table_name>', methods=['POST'])
+def save_data(table_name):
+  """
+  Recibe los datos del formulario y la tabla como parámetro en la URL.
+  """
+  if request.method == 'POST':
+    # Obtener datos del formulario
+    form_data = request.form.to_dict()
 
-    if form_type == 'categories_resources':
-      fields = [
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
-      ]
-    elif form_type == 'catalogue_resources':
-      fields = [
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
-      ]
-    elif form_type == 'supplier':
-      fields = [
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
-      ]
-    elif form_type == 'categories_products':
-      fields = [
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
-      ]
-    elif form_type == 'catalogue_products':
-      fields = [
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
-      ]
-    elif form_type == 'factories':
-      fields = [
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
-      ]
-    elif form_type == 'equipment':
-      fields = [
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
-      ]
+    # Extraer las columnas de los datos recibidos
+    columns = list(form_data.keys())
 
-    return jsonify(fields)
+    # Insertar en la base de datos DB2
+    success = addItem(table_name, columns, form_data)
+
+    if success:
+      return redirect(request.referrer)  # Se asegura que 'main.' esté presente
+    else:
+      return "Error al guardar en la base de datos", 500
+
+@main.route('/delete-item/<string:table_name>/<int:item_id>', methods=['POST'])
+def delete_item(table_name, item_id):
+  """
+  Elimina un elemento de la base de datos según su ID.
+  """
+  try:
+    # Crear la consulta SQL para eliminar
+    query = f"DELETE FROM {table_name.upper()} WHERE ID = ?"
+
+    # Ejecutar la consulta con el ID proporcionado
+    success = run_query(query, (item_id,))
+
+    if success:
+      return redirect(request.referrer)  # Regresar a la misma página
+    else:
+      return "Error al eliminar el elemento", 500
+
+  except Exception as e:
+    return f"Error al eliminar el elemento: {e}", 500
+
+@main.route('/update-item/<string:table_name>/<int:item_id>', methods=['POST'])
+def update_item(table_name, item_id):
+  try:
+    # Obtener los datos del formulario
+    form_data = request.form.to_dict()
+    
+    # Construir la consulta de actualización
+    set_values = ", ".join([f"{col} = ?" for col in form_data.keys()])
+    query = f"UPDATE {table_name} SET {set_values} WHERE ID = ?"
+    
+    # Obtener los valores en el orden correcto
+    values = tuple(form_data.values()) + (item_id,)
+
+    # Ejecutar la actualización
+    success = run_query(query, values)
+
+    if success:
+      return redirect(request.referrer)  # Volver a la página anterior
+    else:
+      return "Error al actualizar el elemento", 500
+
+  except Exception as e:
+    print(f"Error al actualizar el elemento: {e}")
+    return "Error interno", 500
