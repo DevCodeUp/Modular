@@ -25,11 +25,6 @@
         <h3>Proveedores</h3>
       </a>
     </div>
-    <div class="card">
-      <a href="{{ url_for('main.config_parameters', section='inventory') }}">
-        <h3>Materia Prima</h3>
-      </a>
-    </div>
   </div>
 </section>
 
@@ -44,11 +39,6 @@
     <div class="card">
       <a href="{{ url_for('main.config_parameters', section='catalogue_products') }}">
         <h3>Catálogo de Productos</h3>
-      </a>
-    </div>
-    <div class="card">
-      <a href="{{ url_for('main.config_parameters', section='production') }}">
-        <h3>Producto Terminado</h3>
       </a>
     </div>
   </div>
@@ -68,11 +58,6 @@
       </a>
     </div>
   </div>
-  <div class="card">
-    <a href="{{ url_for('main.config_parameters', section='production') }}">
-      <h3>Producto en Proceso</h3>
-    </a>
-  </div>
   </div>
 </section>
 
@@ -84,12 +69,17 @@
         <h3>Estructura de Productos (BOM)</h3>
       </a>
     </div>
+  </div>
+</section>
+
+<section class="group" id="system">
+  <h2>Sistema</h2>
+  <div class="card-container">
     <div class="card">
-      <a href="{{ url_for('main.config_parameters', section='mrp') }}">
-        <h3>Plan de Producción</h3>
+      <a href="#">
+        <h3>Reentrenar IA de planeación de procesos</h3>
       </a>
     </div>
   </div>
-</section>
 </section>
 {% endblock %}

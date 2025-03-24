@@ -151,6 +151,7 @@ nav {
 
     li {
       list-style: none;
+      position: relative;
 
       a {
         color: #fff;
@@ -165,6 +166,29 @@ nav {
       a:hover {
         background-color: #eeee2d;
         color: #000000;
+      }
+
+      .submenu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #1f2d3d;
+        padding: 10px;
+        border-radius: 5px;
+        z-index: 1000;
+
+        li {
+          padding: 5px 0;
+
+          a {
+            padding: 5px 10px;
+          }
+        }
+      }
+
+      &:hover .submenu {
+        display: block;
       }
     }
   }
