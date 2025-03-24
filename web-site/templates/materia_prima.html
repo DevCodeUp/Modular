@@ -1,62 +1,31 @@
 {% extends 'base.html' %}
 
-{% block title %}Materia Prima{% endblock %}
+{% block title %}Materia prima{% endblock %}
 
 {% block second_style %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/config.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/materia_prima.css') }}">
 {% endblock %}
 
 {% block content %}
-<section class="group" id="inventario">
-  <h2>Inventario de Materia Prima</h2>
-  <div class="card-container">
-    <div class="card">
-      <a href="{{ url_for('main.config_parameters', section='inventory') }}">
-        <h3>Inventario Actual</h3>
-      </a>
-    </div>
-    <div class="card">
-      <a href="{{ url_for('main.config_parameters', section='supplier') }}">
-        <h3>Proveedores</h3>
-      </a>
-    </div>
-    <div class="card">
-      <a href="{{ url_for('main.config_parameters', section='categories_resources') }}">
-        <h3>Categorías de Recursos</h3>
-      </a>
-    </div>
+<div class="container">
+  <button id="add-compra-btn">Agregar Compra</button>
+  <div class="content">
+    <table id="compras-table">
+      <thead>
+        <tr>
+          <th>No. Compra</th>
+          <th>Materia Prima</th>
+          <th>Proveedor</th>
+          <th>Cantidad</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Compras se agregarán dinámicamente aquí -->
+      </tbody>
+    </table>
   </div>
-</section>
+</div>
 
-<section class="group" id="entradas-salidas">
-  <h2>Entradas y Salidas</h2>
-  <div class="card-container">
-    <div class="card">
-      <a href="#">
-        <h3>Registrar Entrada</h3>
-      </a>
-    </div>
-    <div class="card">
-      <a href="#">
-        <h3>Registrar Salida</h3>
-      </a>
-    </div>
-  </div>
-</section>
-
-<section class="group" id="reportes">
-  <h2>Reportes</h2>
-  <div class="card-container">
-    <div class="card">
-      <a href="#">
-        <h3>Reporte de Inventario</h3>
-      </a>
-    </div>
-    <div class="card">
-      <a href="#">
-        <h3>Reporte de Consumo</h3>
-      </a>
-    </div>
-  </div>
-</section>
+<script src="{{ url_for('static', filename='js/materia_prima.js') }}"></script>
 {% endblock %}

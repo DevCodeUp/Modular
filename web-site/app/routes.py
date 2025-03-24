@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, request, jsonify
-from .queries import get_table_data
+from flask import Blueprint, render_template, request, redirect, url_for, jsonify
+from .queries import *
 
 main = Blueprint('main', __name__)
 
@@ -30,6 +30,7 @@ def producto_terminado():
 @main.route('/plan-produccion')
 def plan_produccion():
     return render_template('plan_produccion.html')
+
 
 @main.route('/config-parameters/<string:section>')
 def config_parameters(section):
@@ -77,6 +78,8 @@ def config_parameters(section):
     columns=df.columns,
     data=df.values
   )
+    #ejecuta esto una vez para entrenar el chatbot
+    #trainer.train("chatterbot.corpus.spanish")
 
 # Formulario de Configuración de parámetros
 @main.route('/get_form', methods=['POST'])

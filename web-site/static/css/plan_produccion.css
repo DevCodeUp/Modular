@@ -1,0 +1,85 @@
+/* Estilos base consistentes */
+#planes-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+    text-align: left;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#planes-table th, #planes-table td {
+    border: 1px solid #ddd;
+    padding: 10px 15px;
+}
+
+#planes-table th {
+    background-color: #f4f4f4;
+    font-weight: 600;
+}
+
+#planes-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Estilos para botones */
+button.edit-btn, button.complete-btn, button.delete-btn {
+    margin: 0 5px;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    color: white;
+}
+
+button.edit-btn {
+    background-color: #3498db; /* Azul para editar */
+}
+
+button.complete-btn {
+    background-color: #2ecc71; /* Verde para completar */
+}
+
+button.delete-btn {
+    background-color: #e74c3c;
+}
+
+/* Badges de estado */
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    background-color: #f39c12; /* Naranja para pendiente */
+    color: white;
+}
+
+.status-badge.completed {
+    background-color: #27ae60; /* Verde para completado */
+}
+
+/* Botón principal */
+#add-plan-btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 20px;
+}
+
+#add-plan-btn:hover {
+    background-color: #2980b9;
+}
+
+.content {
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}

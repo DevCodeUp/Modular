@@ -1,62 +1,32 @@
 {% extends 'base.html' %}
 
-{% block title %}Plan de Producción{% endblock %}
+{% block title %}Plan de Producción - Pastelería{% endblock %}
 
 {% block second_style %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/config.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/plan_produccion.css') }}">
 {% endblock %}
 
 {% block content %}
-<section class="group" id="planificacion">
-  <h2>Planificación de Producción</h2>
-  <div class="card-container">
-    <div class="card">
-      <a href="{{ url_for('main.config_parameters', section='mrp') }}">
-        <h3>Estructura de Productos (BOM)</h3>
-      </a>
-    </div>
-    <div class="card">
-      <a href="#">
-        <h3>Planificar Producción</h3>
-      </a>
-    </div>
-    <div class="card">
-      <a href="#">
-        <h3>Órdenes de Producción</h3>
-      </a>
-    </div>
+<div class="container">
+  <button id="add-plan-btn">Agregar Plan</button>
+  <div class="content">
+    <table id="planes-table">
+      <thead>
+        <tr>
+          <th>No. Plan</th>
+          <th>Producto</th>
+          <th>Cantidad</th>
+          <th>Fecha Producción</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Planes se agregarán dinámicamente aquí -->
+      </tbody>
+    </table>
   </div>
-</section>
+</div>
 
-<section class="group" id="seguimiento">
-  <h2>Seguimiento de Producción</h2>
-  <div class="card-container">
-    <div class="card">
-      <a href="#">
-        <h3>Estado de Órdenes</h3>
-      </a>
-    </div>
-    <div class="card">
-      <a href="#">
-        <h3>Reporte de Avance</h3>
-      </a>
-    </div>
-  </div>
-</section>
-
-<section class="group" id="optimizacion">
-  <h2>Optimización</h2>
-  <div class="card-container">
-    <div class="card">
-      <a href="#">
-        <h3>Optimizar Planificación</h3>
-      </a>
-    </div>
-    <div class="card">
-      <a href="#">
-        <h3>Reentrenar IA de Planeación</h3>
-      </a>
-    </div>
-  </div>
-</section>
+<script src="{{ url_for('static', filename='js/plan_produccion.js') }}"></script>
 {% endblock %}

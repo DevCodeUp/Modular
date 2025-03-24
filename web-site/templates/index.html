@@ -32,37 +32,53 @@
         <li><a href="#eficiencia" class="nav-button">Eficiencia</a></li>
         <li><a href="#tiempos" class="nav-button">Tiempos de Producción</a></li>
         <li><a href="#ia" class="nav-button">IA</a></li>
+        <li><a href="{{ url_for('main.stadistics') }}" class="nav-button">Estadísticas</a></li>
         <li><a href="{{ url_for('main.config') }}" class="nav-button">Configuración</a></li>
       </ul>
     </nav>
   </header>
 
-  <section class="content">
-    <div class="content-section" id="rendimiento">
-      <h3>Rendimiento</h3>
-      <p>Monitorización de la productividad y análisis de cuellos de botella.</p>
-      <canvas id="chartRendimiento"></canvas>
+    <!-- Formulario flotante de inicio de sesión -->
+    <div class="login-form" id="login-form">
+      <form>
+        <h3>Iniciar Sesión</h3>
+        <label for="employee-number">Número de empleado</label>
+        <input type="text" id="employee-number" placeholder="Ingrese su número de empleado">
+  
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" placeholder="Ingrese su contraseña">
+  
+        <button type="submit">Iniciar Sesión</button>
+        <button type="button" id="close-login">Cerrar</button>
+      </form>
     </div>
-    
-    <div class="content-section" id="eficiencia">
-      <h3>Eficiencia de Producción</h3>
-      <p>Comparación de productos terminados y defectuosos.</p>
-      <canvas id="chartEficiencia"></canvas>
-    </div>
-    
-    <div class="content-section" id="tiempos">
-      <h3>Tiempo Promedio por Máquina</h3>
-      <p>Análisis del tiempo de producción por máquina.</p>
-      <canvas id="chartTiempos"></canvas>
-    </div>
-  </section>
-
-  <footer>
-    <p>ERP Inteligente - Soluciones avanzadas para la industria. &copy; 2024</p>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="{{ url_for('static', filename='js/index.js') }}"></script>
-</body>
-
-</html>
+  
+    <section class="hero">
+      <h2>Optimización y análisis inteligente para tu producción</h2>
+      <p>Aumenta la eficiencia y reduce los errores con el poder de la inteligencia artificial</p>
+    </section>
+  
+    <section class="content">
+      <div class="content-section" id="calidad">
+        <h3>Calidad</h3>
+        <p>Visión artificial para inspeccionar y garantizar la calidad en la producción.</p>
+      </div>
+      <div class="content-section" id="rendimiento">
+        <h3>Rendimiento</h3>
+        <p>Monitorización de la productividad y análisis de cuellos de botella.</p>
+      </div>
+      <div class="content-section" id="ia">
+        <h3>Inteligencia Artificial</h3>
+        <p>Predicciones basadas en datos para optimizar la producción y mejorar la eficiencia.</p>
+      </div>
+    </section>
+  
+    <footer>
+      <p>ERP Inteligente - Soluciones avanzadas para la industria. &copy; 2024</p>
+    </footer>
+  
+    <script src="{{ url_for('static', filename='js/index.js')}}"></script>
+  
+  </body>
+  
+  </html>
