@@ -69,3 +69,9 @@ INSERT INTO Equipment (ID_Factory, ID_Product, Name, Min_Prod, Unit_Measure, Tim
 (1, 1, 'Horno Triple Choc', 10, 'kg', 2, 'h'),
 (1, 2, 'Batidora Fresas', 8, 'kg', 1, 'h'),
 (1, 3, 'Horno Vainilla', 12, 'kg', 2, 'h');
+
+-- Población de la tabla Production (Datos simulados de producción por equipo)
+INSERT INTO Production (ID_Equipment, Quant_Prod, Unit_Measure, Time, Unit_Time) VALUES 
+(1, 200, 'kg', 3, 'h'),
+(2, 150, 'kg', 2, 'h'),
+(3, 220, 'kg', 4, 'h');

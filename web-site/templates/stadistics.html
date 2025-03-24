@@ -1,11 +1,32 @@
 {% extends 'base.html' %}
 
-{% block title %}Configuración{% endblock %}
+{% block title %}Dashboard de Estadísticas{% endblock %}
 
 {% block second_style %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/stadistics.css') }}">
 {% endblock %}
 
 {% block content %}
-<img src="https://imgs.search.brave.com/7lsDxMtiIreUq5esb_g1bIDY6g6n9Ex29Pe4NRZDZ3s/rs:fit:860:0:0:0/g:ce/aHR0cDovL3d3dy5o/YXJib3IuY29tLmJy/L3dwLWNvbnRlbnQv/dXBsb2Fkcy8yMDE5/LzAzL2Rhc2hib2Fy/ZF9pbWFnZW1fZGVz/dGFxdWUucG5n" alt="">
+<section class="content">
+    <div class="content-section" id="rendimiento">
+        <h3>Rendimiento</h3>
+        <p>Producción diaria por semana.</p>
+        <canvas id="chartRendimiento"></canvas>
+    </div>
+
+    <div class="content-section" id="stock">
+        <h3>Inventario</h3>
+        <p>Stock actual por recurso.</p>
+        <canvas id="chartStock"></canvas>
+    </div>
+
+    <div class="content-section" id="tiempos">
+        <h3>Producción por Máquina</h3>
+        <p>Tiempo promedio de producción por máquina.</p>
+        <canvas id="chartTiempoMaquina"></canvas>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/stadistics.js') }}"></script>
 {% endblock %}

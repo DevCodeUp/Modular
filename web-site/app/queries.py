@@ -18,16 +18,6 @@ def getData(query):
             close_db_connection(connection)
 
 def run_query(query,  params=None):
-    """
-    Ejecuta una consulta en la base de datos DB2.
-    
-    Parámetros:
-    - query (str): Consulta SQL a ejecutar.
-
-    Retorna:
-    - True si la consulta fue exitosa.
-    - False si hubo un error.
-    """
     connection = None
     try:
         # Obtener conexión a DB2
@@ -292,3 +282,41 @@ def addItem(table, columns, data):
     finally:
         if connection:
             close_db_connection(connection)  # Cierra la conexión
+
+def updateItem(table, columns, form_data):
+    connection = None
+    try:
+        # Obtener conexión a DB2
+        connection = get_db_connection()
+
+        # Extraer el ID de la primer columna de form_data (asumimos que el ID está en la primera posición)
+        record_id = form_data[columns[0]]  # Suponiendo que la primer columna contiene el ID
+
+        # Construir la parte de SET de la consulta (por ejemplo, "col1 = ?, col2 = ?")
+        set_clause = ", ".join([f"{col} = ?" for col in columns[1:]])  # Ignoramos la primera columna, ya que es el ID
+
+        # Crear la consulta SQL de actualización
+        query = f"UPDATE {table.upper()} SET {set_clause} WHERE ID = ?"
+
+        # Obtener los valores de los datos del formulario en el mismo orden de las columnas, excepto el ID
+        # Si el valor comienza con '$', eliminamos el signo
+        values = []
+        for col in columns[1:]:  # Iterar solo por las columnas a actualizar (sin contar el ID)
+            value = form_data[col]
+            if isinstance(value, str) and value.startswith('$'):
+                value = value[1:]  # Eliminar el signo '$'
+            values.append(value)
+        # Añadimos el ID al final de los valores
+        values.append(record_id)
+
+        # Preparar y ejecutar la consulta
+        stmt = ibm_db.prepare(connection, query)
+        ibm_db.execute(stmt, tuple(values))
+
+        return True  # Indicar que la actualización fue exitosa
+    except Exception as e:
+        print(f"Error al actualizar item en {table}: {e}")
+        return False  # Indicar que ocurrió un error
+    finally:
+        if connection:
+            close_db_connection(connection)  # Cerrar la conexión

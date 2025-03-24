@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect
 from .queries import *
 
 main = Blueprint('main', __name__)
@@ -14,10 +14,6 @@ def config():
 @main.route('/materia-prima')
 def materia_prima():
   return render_template('materia_prima.html')
-
-@main.route('/stadistics')
-def stadistics():
-  return render_template('stadistics.html')
 
 @main.route('/production-order')
 def production_orders():
@@ -115,27 +111,19 @@ def delete_item(table_name, item_id):
   except Exception as e:
     return f"Error al eliminar el elemento: {e}", 500
 
-@main.route('/update-item/<string:table_name>/<int:item_id>', methods=['POST'])
-def update_item(table_name, item_id):
-  try:
-    # Obtener los datos del formulario
+@main.route('/update-data/<string:table_name>', methods=['POST'])
+def update_data(table_name):
+  if request.method == 'POST':
+    # Obtener datos del formulario
     form_data = request.form.to_dict()
-    
-    # Construir la consulta de actualización
-    set_values = ", ".join([f"{col} = ?" for col in form_data.keys()])
-    query = f"UPDATE {table_name} SET {set_values} WHERE ID = ?"
-    
-    # Obtener los valores en el orden correcto
-    values = tuple(form_data.values()) + (item_id,)
 
-    # Ejecutar la actualización
-    success = run_query(query, values)
+    # Extraer las columnas de los datos recibidos
+    columns = list(form_data.keys())
+
+    # Insertar en la base de datos DB2
+    success = updateItem(table_name, columns, form_data)
 
     if success:
-      return redirect(request.referrer)  # Volver a la página anterior
+      return redirect(request.referrer)  # Se asegura que 'main.' esté presente
     else:
-      return "Error al actualizar el elemento", 500
-
-  except Exception as e:
-    print(f"Error al actualizar el elemento: {e}")
-    return "Error interno", 500
+      return "Error al guardar en la base de datos", 500

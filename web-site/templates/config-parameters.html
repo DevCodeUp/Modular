@@ -31,7 +31,7 @@
             {% for row in data %}
             <tr>
                 <td>
-                    <button type="button" class="edit-button" onclick="openEditForm({{ row }})">
+                    <button type="button" class="edit-button" onclick="showEditForm({{ row }})">
                         <svg class="edit-svgIcon" viewBox="0 0 512 512">
                             <path d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1v32c0 8.8 7.2 16 16 16h32zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z"></path>
                         </svg>
@@ -96,14 +96,14 @@
             {% endfor %}
         </tbody>
     </table>
-  </section>
+</section>
 
-  <!-- Formulario flotante para agregar un ítem -->
-  <div id="form-overlay" class="overlay hidden">
+<!-- Formulario flotante para agregar un ítem -->
+<div id="form-overlay-add" class="overlay hidden">
     <div class="form-container">
         <form class="form" id="form-add" action="{{ url_for('main.save_data', table_name=table) }}" method="POST">
-            <button type="button" class="close-btn" id="close-form">&times;</button>
-            <p class="title">Register</p>
+            <button type="button" class="close-btn" id="close-form-add">&times;</button>
+            <p class="title">Añadir Item</p>
             {% for row in id_columns %}
                 {% set column_name = row[0] %}
                 {% set column_type = row[1] %}
@@ -134,45 +134,45 @@
 </div>
 
 <!-- Formulario flotante de edición -->
-<div id="edit-form-overlay" class="overlay hidden">
+<div id="form-overlay-edit" class="overlay hidden">
     <div class="form-container">
-      <form class="form" id="edit-form" method="POST" action="{{ url_for('main.update_item', table_name=table) }}">
-        <button type="button" class="close-btn" onclick="closeEditForm()">&times;</button>
-        <p class="title">Editar Item</p>
-  
-        <!-- Los campos se llenarán dinámicamente con JavaScript -->
-        {% for row in id_columns %}
-          {% set column_name = row[0] %}
-          {% set column_type = row[1] %}
-          {% if column_name != 'ID' %}
-            <label>
-              {% if column_type.strip() == 'INTEGER' and column_name[:3] == 'ID_' %}
-                <select id="edit-{{ column_name }}" name="{{ column_name }}">
-                  <option value="">Seleccione una opción</option>
-                  {% set options = options_dictionary[column_name][0] %}
-                  {% for value in options %}
-                    <option value="{{ value[0] }}">{{ value[1] }}</option>
-                  {% endfor %}
-                </select>
-              {% else %}
-                <input class="input" id="edit-{{ column_name }}" name="{{ column_name }}" type="{% if column_type.strip() == 'INTEGER' %}number{% else %}text{% endif %}" required>
-              {% endif %}
-              <span>{{ column_name }}</span>
-            </label>
-          {% endif %}
-        {% endfor %}
-  
-        <!-- Campo oculto para almacenar el ID del elemento a editar -->
-        <input type="hidden" id="edit-id" name="id">
-  
-        <button type="button" class="submit" onclick="confirmEdit()">Guardar</button>
-      </form>
+        <form class="form" id="form-add" action="{{ url_for('main.update_data', table_name=table) }}" method="POST">
+            <button type="button" class="close-btn" onclick="hideEditForm()">&times;</button>
+            <p class="title">Editar Item</p>
+            {% for row in id_columns %}
+                {% set column_name = row[0] %}
+                {% set column_type = row[1] %}
+                {% if column_name != 'ID' %}
+                    <label>
+                        {% if column_type == 'INTEGER ' and column_name[:3] == 'ID_' %}
+                            <select id="select-{{ loop.index0 }}" name="{{ column_name }}">
+                                <option value="">Seleccione una opción</option>
+                                
+                                    {% set arrayTemp = options_dictionary[column_name] %}
+                                    {% set options = arrayTemp[0] %}
+                                    {% for value in options %}
+                                        <option value="{{ value[0] }}">{{ value[1] }}</option>
+                                    {% endfor %}
+                                
+                            </select>
+                        {% else %}
+                            <input class="input" id="input-{{ loop.index0 }}" name="{{ column_name }}" type="{% if column_type == 'INTEGER' %} number {% else %} text {% endif %}"
+                            required>
+                        {% endif %}
+                        <span>{{ column_name }}</span>
+                    </label> 
+                {% else %}
+                    <input type="hidden" name="{{ column_name }}" id="input-0">
+                {% endif %}
+            {% endfor %}
+            <button class="submit">Guardar</button>
+        </form>
     </div>
 </div>
 
-  <script>
+<script>
     // Variable enviada desde Flask al cargar el sitio
     const section = "{{ section }}";
-  </script>
-  <script src="{{ url_for('static', filename='js/config-parameters.js') }}"></script>
+</script>
+<script src="{{ url_for('static', filename='js/config-parameters.js') }}"></script>
 {% endblock %}
