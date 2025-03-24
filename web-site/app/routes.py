@@ -11,10 +11,6 @@ def index():
 def config():
   return render_template('config.html')
 
-@main.route('/materia-prima')
-def materia_prima():
-  return render_template('materia_prima.html')
-
 @main.route('/stadistics')
 def stadistics():
   return render_template('stadistics.html')
@@ -22,6 +18,18 @@ def stadistics():
 @main.route('/production-order')
 def production_orders():
   return render_template('production_orders.html')
+
+@main.route('/materia-prima')
+def materia_prima():
+  return render_template('materia_prima.html')
+
+@main.route('/producto-terminado')
+def producto_terminado():
+    return render_template('producto_terminado.html')
+
+@main.route('/plan-produccion')
+def plan_produccion():
+    return render_template('plan_produccion.html')
 
 @main.route('/config-parameters/<string:section>')
 def config_parameters(section):

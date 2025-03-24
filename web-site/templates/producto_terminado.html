@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Producto Terminado{% endblock %}
+
+{% block second_style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/config.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="group" id="inventario">
+  <h2>Inventario de Productos Terminados</h2>
+  <div class="card-container">
+    <div class="card">
+      <a href="{{ url_for('main.config_parameters', section='production') }}">
+        <h3>Inventario Actual</h3>
+      </a>
+    </div>
+    <div class="card">
+      <a href="{{ url_for('main.config_parameters', section='categories_products') }}">
+        <h3>Categorías de Productos</h3>
+      </a>
+    </div>
+    <div class="card">
+      <a href="{{ url_for('main.config_parameters', section='catalogue_products') }}">
+        <h3>Catálogo de Productos</h3>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="group" id="entradas-salidas">
+  <h2>Entradas y Salidas</h2>
+  <div class="card-container">
+    <div class="card">
+      <a href="#">
+        <h3>Registrar Entrada</h3>
+      </a>
+    </div>
+    <div class="card">
+      <a href="#">
+        <h3>Registrar Salida</h3>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="group" id="reportes">
+  <h2>Reportes</h2>
+  <div class="card-container">
+    <div class="card">
+      <a href="#">
+        <h3>Reporte de Inventario</h3>
+      </a>
+    </div>
+    <div class="card">
+      <a href="#">
+        <h3>Reporte de Ventas</h3>
+      </a>
+    </div>
+  </div>
+</section>
+{% endblock %}
