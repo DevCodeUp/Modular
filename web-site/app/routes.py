@@ -31,21 +31,19 @@ def producto_terminado():
 def plan_produccion():
     return render_template('plan_produccion.html')
 
-
 @main.route('/config-parameters/<string:section>')
 def config_parameters(section):
   titles = {
     'categories_resources': 'Categorías de Recursos',
-    'catalogue_resources': 'Catálogo de recursos',
+    'catalogue_resources': 'Catálogo de Recursos',
     'supplier': 'Proveedores',
     'categories_products': 'Categorías de Productos',
     'catalogue_products': 'Catálogo de Productos',
     'factories': 'Fábricas',
     'equipment': 'Equipo/Maquinaria',
     'inventory': 'Materia Prima',
-    'store' : 'Producto en Proceso',
-    'production' : 'Producto Terminado',
-    'equipment': 'Equipo/Maquinaria'
+    'store': 'Producto en Proceso',
+    'production': 'Producto Terminado'
   }
   title_section = titles.get(section, 'Gestión General')
 
@@ -57,9 +55,9 @@ def config_parameters(section):
     'catalogue_products': 'products',
     'factories': 'factories',
     'equipment': 'equipment',
-    'inventory' : 'inventory',
-    'store' : 'store',
-    'production' : 'production'
+    'inventory': 'inventory',
+    'store': 'store',
+    'production': 'production'
   }
   table = tables.get(section)
 
@@ -78,8 +76,6 @@ def config_parameters(section):
     columns=df.columns,
     data=df.values
   )
-    #ejecuta esto una vez para entrenar el chatbot
-    #trainer.train("chatterbot.corpus.spanish")
 
 # Formulario de Configuración de parámetros
 @main.route('/get_form', methods=['POST'])
@@ -87,52 +83,15 @@ def get_form():
     data = request.json
     form_type = data.get('form_type', 'default')
 
-    if form_type == 'categories_resources':
-      fields = [
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
-      ]
-    elif form_type == 'catalogue_resources':
-      fields = [
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
-      ]
-    elif form_type == 'supplier':
-      fields = [
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
-      ]
-    elif form_type == 'categories_products':
-      fields = [
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
-      ]
-    elif form_type == 'catalogue_products':
-      fields = [
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
-      ]
-    elif form_type == 'factories':
-      fields = [
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
-      ]
-    elif form_type == 'equipment':
-      fields = [
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'},
-        {'name': 'name_category', 'type': 'text', 'label': 'Categoría'}
-      ]
+    form_fields = {
+        'categories_resources': [{'name': 'name_category', 'type': 'text', 'label': 'Categoría'}],
+        'catalogue_resources': [{'name': f'name_category_{i}', 'type': 'text', 'label': f'Categoría {i+1}'} for i in range(4)],
+        'supplier': [{'name': f'name_category_{i}', 'type': 'text', 'label': f'Categoría {i+1}'} for i in range(5)],
+        'categories_products': [{'name': 'name_category', 'type': 'text', 'label': 'Categoría'}],
+        'catalogue_products': [{'name': f'name_category_{i}', 'type': 'text', 'label': f'Categoría {i+1}'} for i in range(4)],
+        'factories': [{'name': f'name_category_{i}', 'type': 'text', 'label': f'Categoría {i+1}'} for i in range(5)],
+        'equipment': [{'name': f'name_category_{i}', 'type': 'text', 'label': f'Categoría {i+1}'} for i in range(6)]
+    }
 
+    fields = form_fields.get(form_type, [])
     return jsonify(fields)
