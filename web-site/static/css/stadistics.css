@@ -1,4 +1,51 @@
-img{
-    width: 70%;
-    height: 70%;
+/* General: Configuración de la página */
+.content {
+  max-width: 1200px;
+  margin: 50px auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+/* Sección de cada gráfica */
+.content-section {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 48%;
+  margin-bottom: 20px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.content-section h3 {
+  font-size: 1.8em;
+  color: #1f2d3d;
+  margin-bottom: 20px;
+}
+
+.content-section p {
+  font-size: 1.1em;
+  color: #666;
+}
+
+/* Efecto al pasar el mouse sobre cada sección */
+.content-section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Ajustes para las gráficas */
+canvas {
+  width: 100% !important;
+  height: 400px !important;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .content-section {
+      width: 100%;
+  }
 }

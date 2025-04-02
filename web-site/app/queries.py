@@ -18,16 +18,6 @@ def getData(query):
             close_db_connection(connection)
 
 def run_query(query,  params=None):
-    """
-    Ejecuta una consulta en la base de datos DB2.
-    
-    Parámetros:
-    - query (str): Consulta SQL a ejecutar.
-
-    Retorna:
-    - True si la consulta fue exitosa.
-    - False si hubo un error.
-    """
     connection = None
     try:
         # Obtener conexión a DB2
@@ -155,6 +145,15 @@ def getStore():
     """
     return getData(query)
 
+def getSales():
+    query = """
+    SELECT s.ID AS "ID", p.NAME_PRODUCT AS "Producto", s.AMOUNT AS "Cantidad",
+    s.PRICE AS "Precio", s.DATE AS "Fecha de venta"
+    FROM SALES s
+    INNER JOIN PRODUCTS p ON p.ID = s.ID_PRODUCT ;
+    """
+    return getData(query)
+  
 # Función para obtener datos según la sección
 def get_table_data(section):
     """
@@ -170,7 +169,8 @@ def get_table_data(section):
         'factories': getFactories,
         'equipment': getEquipment,
         'production': getProduction,
-        'store': getStore
+        'store': getStore,
+        'sales': getSales
     }
 
     # Verifica si la sección existe en el diccionario
@@ -292,3 +292,95 @@ def addItem(table, columns, data):
     finally:
         if connection:
             close_db_connection(connection)  # Cierra la conexión
+
+def updateItem(table, columns, form_data):
+    connection = None
+    try:
+        # Obtener conexión a DB2
+        connection = get_db_connection()
+
+        # Extraer el ID de la primer columna de form_data (asumimos que el ID está en la primera posición)
+        record_id = form_data[columns[0]]  # Suponiendo que la primer columna contiene el ID
+
+        # Construir la parte de SET de la consulta (por ejemplo, "col1 = ?, col2 = ?")
+        set_clause = ", ".join([f"{col} = ?" for col in columns[1:]])  # Ignoramos la primera columna, ya que es el ID
+
+        # Crear la consulta SQL de actualización
+        query = f"UPDATE {table.upper()} SET {set_clause} WHERE ID = ?"
+
+        # Obtener los valores de los datos del formulario en el mismo orden de las columnas, excepto el ID
+        # Si el valor comienza con '$', eliminamos el signo
+        values = []
+        for col in columns[1:]:  # Iterar solo por las columnas a actualizar (sin contar el ID)
+            value = form_data[col]
+            if isinstance(value, str) and value.startswith('$'):
+                value = value[1:]  # Eliminar el signo '$'
+            values.append(value)
+        # Añadimos el ID al final de los valores
+        values.append(record_id)
+
+        # Preparar y ejecutar la consulta
+        stmt = ibm_db.prepare(connection, query)
+        ibm_db.execute(stmt, tuple(values))
+
+        return True  # Indicar que la actualización fue exitosa
+    except Exception as e:
+        print(f"Error al actualizar item en {table}: {e}")
+        return False  # Indicar que ocurrió un error
+    finally:
+        if connection:
+            close_db_connection(connection)  # Cerrar la conexión
+
+def uploadFile(query, columns, data):
+    connection = None
+    try:
+        # Obtener conexión a DB2
+        connection = get_db_connection()
+
+        # Preparar la consulta
+        stmt = ibm_db.prepare(connection, query)
+
+        if isinstance(columns, str):
+            columns = columns.split(',')
+
+        # Iterar sobre los datos
+        for row in data:
+            # Crear una lista para los valores de la fila
+            values = []
+
+            # Recorrer las columnas y agregar los valores correspondientes
+            for i in range(len(columns)):
+                values.append(row[i])
+            
+            # Ejecutar la consulta con los valores de la fila
+            ibm_db.execute(stmt, tuple(values))
+
+        return True  # Éxito en la ejecución
+
+    except Exception as e:
+        print(f"Error en la consulta: {e}")
+        return False  # Error en la ejecución
+
+    finally:
+        if connection:
+            close_db_connection(connection)  # Cerrar la conexión
+
+# Conexión a la base de datos (conexión DB2)
+def get_sales_data():
+    try:
+        conn = get_db_connection()
+        query = "SELECT AMOUNT, PRICE, DATE FROM SALES"
+        stmt = ibm_db.exec_immediate(conn, query)
+        sales_data = []
+        while ibm_db.fetch_row(stmt):
+            sales_data.append({
+                'Amount': ibm_db.result(stmt, 0),
+                'Price': ibm_db.result(stmt, 1),
+                'Date': ibm_db.result(stmt, 2)
+            })
+        df = pd.DataFrame(sales_data)
+        ibm_db.close(conn)
+        return df
+    except Exception as e:
+        print(f"Error al obtener los datos: {e}")
+        return None

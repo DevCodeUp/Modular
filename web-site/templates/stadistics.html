@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard de Estadísticas{% endblock %}
+
+{% block second_style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/stadistics.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="content">
+    <div class="content-section" id="rendimiento">
+        <h3>Rendimiento</h3>
+        <p>Producción diaria por semana.</p>
+        <canvas id="chartRendimiento"></canvas>
+    </div>
+
+    <div class="content-section" id="stock">
+        <h3>Inventario</h3>
+        <p>Stock actual por recurso.</p>
+        <canvas id="chartStock"></canvas>
+    </div>
+
+    <div class="content-section" id="tiempos">
+        <h3>Producción por Máquina</h3>
+        <p>Tiempo promedio de producción por máquina.</p>
+        <canvas id="chartTiempoMaquina"></canvas>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/stadistics.js') }}"></script>
+{% endblock %}

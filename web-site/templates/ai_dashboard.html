@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Entrenamiento de IA{% endblock %}
+
+{% block second_style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/ai_dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<h2>Entrenamiento de IA para Predicción y Planeación de Producción</h2>
+
+<!-- Botón para reentrenar IA -->
+<button id="startTrainingBtn" class="nav-button">Entrenar IA</button>
+
+<!-- Barra de Progreso -->
+<div id="progress-container">
+    <div id="progressBar" style="width: 0%; height: 30px; background-color: #4CAF50; text-align: center; color: white; line-height: 30px;">0%</div>
+</div>
+
+<!-- Información de Progreso -->
+<div id="progressInfo" style="text-align: center; margin-top: 20px; font-size: 1.2em;">
+    <!-- Mostrará el Epoch, Accuracy y Loss -->
+</div>
+
+<!-- Contenedor de Gráficas -->
+<div id="charts-container">
+    <h3>Gráficas del Entrenamiento</h3>
+    <div id="purchaseOrders">
+        <p>Progreso de Entrenamiento:</p>
+    </div>
+    <div id="adjustedOrders">
+        <p>Progreso de Pérdidas:</p>
+    </div>
+    <p id="arimaForecast"></p>
+</div>
+
+
+<script src="{{ url_for('static', filename='js/ai_dashboard.js') }}"></script>
+
+{% endblock %}

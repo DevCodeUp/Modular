@@ -32,11 +32,7 @@
             <li><a href="{{ url_for('main.plan_produccion') }}" class="nav-button product-link">Plan de producción</a></li>
           </ul>
         </li>
-        <li><a href="#rendimiento" class="nav-button">Rendimiento</a></li>
-        <li><a href="#eficiencia" class="nav-button">Eficiencia</a></li>
-        <li><a href="#tiempos" class="nav-button">Tiempos de Producción</a></li>
-        <li><a href="#ia" class="nav-button" id="ia-link">IA</a></li>
-        <li><a href="{{ url_for('main.stadistics') }}" class="nav-button" id="statistics-link">Estadísticas</a></li>
+        <li><a href="{{ url_for('stats_api.dashboard') }}" class="nav-button">Estadísticas</a></li>
         <li><a href="{{ url_for('main.config') }}" class="nav-button" id="config-link">Configuración</a></li>
       </ul>
     </nav>
