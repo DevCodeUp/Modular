@@ -75,3 +75,26 @@ INSERT INTO Production (ID_Equipment, Quant_Prod, Unit_Measure, Time, Unit_Time)
 (1, 200, 'kg', 3, 'h'),
 (2, 150, 'kg', 2, 'h'),
 (3, 220, 'kg', 4, 'h');
+
+-- Inserción de recetas simuladas para productos existentes
+
+-- Pastel Triple Chocolate (PRODUCTID = 1)
+INSERT INTO RECIPES (PRODUCTID, RESOURCEID, QUANTITY, UNIT) VALUES
+(1, 1, 1.50, 'kg'),      -- Harina de Trigo
+(1, 2, 0.75, 'lt'),      -- Leche Entera
+(1, 3, 0.50, 'kg'),      -- Azúcar Morena
+(1, 5, 200, 'g');        -- Perlas de Chocolate
+
+-- Pastel de Fresas (PRODUCTID = 2)
+INSERT INTO RECIPES (PRODUCTID, RESOURCEID, QUANTITY, UNIT) VALUES
+(2, 1, 1.20, 'kg'),      -- Harina de Trigo
+(2, 2, 0.80, 'lt'),      -- Leche Entera
+(2, 3, 0.40, 'kg'),      -- Azúcar Morena
+(2, 4, 0.90, 'kg');      -- Fresas Frescas
+
+-- Pastel Clásico de Vainilla (PRODUCTID = 3)
+INSERT INTO RECIPES (PRODUCTID, RESOURCEID, QUANTITY, UNIT) VALUES
+(3, 1, 1.00, 'kg'),      -- Harina de Trigo
+(3, 2, 1.00, 'lt'),      -- Leche Entera
+(3, 3, 0.60, 'kg'),      -- Azúcar Morena
+(3, 5, 100, 'g');        -- Perlas de Chocolate como decoración opcional

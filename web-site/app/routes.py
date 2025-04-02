@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, request, redirect
 from .queries import *
+import csv
+import io
 
 main = Blueprint('main', __name__)
 
@@ -31,7 +33,8 @@ def config_parameters(section):
     'equipment': 'Equipo/Maquinaria',
     'inventory': 'Materia Prima',
     'store' : 'Producto Terminado',
-    'production' : 'Producción en proceso'
+    'production' : 'Producción en proceso',
+    'sales': 'Ventas'
   }
   title_section = titles.get(section, 'Gestión General')
 
@@ -45,7 +48,8 @@ def config_parameters(section):
     'equipment': 'equipment',
     'inventory' : 'inventory',
     'store' : 'store',
-    'production' : 'production'
+    'production' : 'production',
+    'sales': 'sales'
   }
   table = tables.get(section)
 
@@ -68,6 +72,18 @@ def config_parameters(section):
     data=df.values.tolist(),
     id_columns=df2.values.tolist(),
     options_dictionary=options_dictionary,
+    table=table
+  )
+
+@main.route('/upload-sales')
+def upload_sales():
+  
+  title_section = "Histórico de ventas"
+  table = "sales"
+  
+  return render_template(
+    'sales.html',
+    title_section=title_section,
     table=table
   )
 
@@ -127,3 +143,28 @@ def update_data(table_name):
       return redirect(request.referrer)  # Se asegura que 'main.' esté presente
     else:
       return "Error al guardar en la base de datos", 500
+    
+@main.route('/upload_csv/<string:table_name>', methods=['POST'])
+def upload_csv(table_name):
+    file = request.files.get('csv_file')
+
+    if not file or not file.filename.endswith('.csv'):
+        return redirect(request.referrer)
+
+    stream = io.StringIO(file.stream.read().decode("UTF8"), newline=None)
+    reader = csv.reader(stream)
+    headers = next(reader)  # Lee la primera fila como encabezados
+
+    if headers[0].upper() == 'ID':
+        headers = headers[1:]
+        data = [row[1:] for row in reader]
+    else:
+        data = [row for row in reader]
+
+    placeholders = ', '.join(['?'] * len(headers))
+    columns = ', '.join(headers)
+    query = f"INSERT INTO {table_name.upper()} ({columns.upper()}) VALUES ({placeholders.upper()})"
+
+    uploadFile(query, columns, data)
+
+    return redirect(request.referrer)

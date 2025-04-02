@@ -10,13 +10,19 @@
 <section class="hero">
     <h2>{{ title_section }}</h2>
     <p>Gestiona y ajusta con la información adecuada para tu empresa.</p>
-  </section>
-  <section class="content">
+</section>
+<section class="content">
     <h3>Listado</h3>
-    <button type="button" class="button" id="add-item-button">
+    <button type="button" class="add-button" id="add-item-button">
         <span class="button__text">Add Item</span>
         <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
     </button>
+    <div class="button-group">
+        <form id="csv-upload-form" action="{{ url_for('main.upload_csv', table_name=table) }}" method="POST" enctype="multipart/form-data">
+            <input type="file" name="csv_file" accept=".csv" required>
+            <button type="button" class="button" onclick="confirmUpload()">Subir CSV</button>
+        </form>
+    </div>
     <table>
         <thead>
             <tr>
