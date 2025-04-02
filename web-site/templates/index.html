@@ -17,48 +17,43 @@
     
     <!-- Botón de inicio de sesión centrado -->
     <div class="login-container">
-      <button id="login-btn">Iniciar Sesión</button>
+      <button id="login-btn" style="display: {% if current_user %} none {% else %} block {% endif %};">Iniciar Sesión</button>
     </div>
 
     <!-- Menú flotante (oculto hasta que el usuario inicie sesión) -->
-    <nav id="navbar" style="display: none;">
-      <ul id="nav-list">
-        <li><a href="{{ url_for('main.index') }}" class="nav-button">Inicio</a></li>
-        <li>
-          <a href="#" class="nav-button" id="product-menu">Producto</a>
-          <ul class="submenu" id="product-submenu">
-            <li><a href="{{ url_for('main.materia_prima') }}" class="nav-button product-link">Materia prima</a></li>
-            <li><a href="{{ url_for('main.producto_terminado') }}" class="nav-button product-link">Producto terminado</a></li>
-            <li><a href="{{ url_for('main.plan_produccion') }}" class="nav-button product-link">Plan de producción</a></li>
-          </ul>
-        </li>
-        <li><a href="{{ url_for('stats_api.dashboard') }}" class="nav-button">Estadísticas</a></li>
-        <li><a href="{{ url_for('main.config') }}" class="nav-button" id="config-link">Configuración</a></li>
+    <nav id="navbar">
+      <ul id="nav-list" style="display: {% if current_user %} flex {% else %} none {% endif %};">
+          <li><a href="{{ url_for('main.index') }}" class="nav-button">Inicio</a></li>
+          <li>
+              <a href="#" class="nav-button" id="product-menu">Producto</a>
+              <ul class="submenu" id="product-submenu">
+                  <li><a href="{{ url_for('main.inventory') }}" class="nav-button product-link">Materia prima</a></li>
+                  <li><a href="{{ url_for('main.store') }}" class="nav-button product-link">Producto terminado</a></li>
+                  <li><a href="{{ url_for('main.production') }}" class="nav-button product-link">Plan de producción</a></li>
+              </ul>
+          </li>
+          <li><a href="{{ url_for('stats_api.dashboard') }}" class="nav-button" id="statistics-link">Estadísticas</a></li>
+          <li><a href="{{ url_for('main.config') }}" class="nav-button" id="config-link">Configuración</a></li>
       </ul>
     </nav>
   </header>
 
   <!-- Formulario flotante de inicio de sesión -->
-  <div class="login-form" id="login-form">
-    <form id="login-form-content">
-      <h3>Iniciar Sesión</h3>
-      <label for="employee-number">Número de empleado</label>
-      <input type="text" id="employee-number" placeholder="Ingrese su número de empleado" required>
-      
-      <label for="password">Contraseña</label>
-      <input type="password" id="password" placeholder="Ingrese su contraseña" required>
-      
-      <label for="role">Rol</label>
-      <select id="role">
-        <option value="IT">IT</option>
-        <option value="Supervisor">Supervisor</option>
-        <option value="Empleado">Empleado</option>
-      </select>
-      
-      <button type="submit">Iniciar Sesión</button>
-      <button type="button" id="close-login">Cerrar</button>
-    </form>
-  </div>
+<div class="login-form" id="login-form" style="display: none;">
+  <form id="login-form-content">
+    <h3>Iniciar Sesión</h3>
+    
+    <label for="employee-number">Número de empleado</label>
+    <input type="text" id="employee-number" placeholder="Ingrese su número de empleado" required>
+
+    <label for="password">Contraseña</label>
+    <input type="password" id="password" placeholder="Ingrese su contraseña" required>
+
+    <button type="submit">Iniciar Sesión</button>
+    <button type="button" id="close-login">Cerrar</button>
+  </form>
+</div>
+
 
   <section class="hero">
     <h2>Optimización y análisis inteligente para tu producción</h2>
@@ -66,15 +61,11 @@
   </section>
 
   <section class="content">
-    <div class="content-section" id="calidad" style="display: none;">
-      <h3>Calidad</h3>
-      <p>Visión artificial para inspeccionar y garantizar la calidad en la producción.</p>
-    </div>
-    <div class="content-section" id="rendimiento" style="display: none;">
+    <div class="content-section" id="rendimiento">
       <h3>Rendimiento</h3>
-      <p>Monitorización de la productividad y análisis de cuellos de botella.</p>
+      <p>Monitorización de la productividad y análisis.</p>
     </div>
-    <div class="content-section" id="ia" style="display: none;">
+    <div class="content-section" id="ia">
       <h3>Inteligencia Artificial</h3>
       <p>Predicciones basadas en datos para optimizar la producción y mejorar la eficiencia.</p>
     </div>

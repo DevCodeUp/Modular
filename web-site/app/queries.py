@@ -384,3 +384,25 @@ def get_sales_data():
     except Exception as e:
         print(f"Error al obtener los datos: {e}")
         return None
+
+# Función para verificar el usuario en la tabla USERS
+def verify_user(employee_number, password):
+    try:
+        conn = get_db_connection()
+        query = "SELECT ROL FROM USERS WHERE USERNAME = ? AND PASSWORD = ?"
+        stmt = ibm_db.prepare(conn, query)
+        ibm_db.bind_param(stmt, 1, employee_number)
+        ibm_db.bind_param(stmt, 2, password)
+        ibm_db.execute(stmt)
+
+        result = ibm_db.fetch_assoc(stmt)
+        
+        if result:
+            return result['ROL']
+        else:
+            return None  # Si no se encuentra el usuario o la contraseña es incorrecta
+
+    except Exception as e:
+        raise Exception(f"Error al verificar el usuario: {e}")
+    finally:
+        close_db_connection(conn)

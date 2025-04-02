@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, render_template
+from flask import Blueprint, jsonify, render_template, session, url_for
 from .database import *
 
 # Crear el blueprint de estadísticas

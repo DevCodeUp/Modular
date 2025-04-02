@@ -98,3 +98,9 @@ INSERT INTO RECIPES (PRODUCTID, RESOURCEID, QUANTITY, UNIT) VALUES
 (3, 2, 1.00, 'lt'),      -- Leche Entera
 (3, 3, 0.60, 'kg'),      -- Azúcar Morena
 (3, 5, 100, 'g');        -- Perlas de Chocolate como decoración opcional
+
+--Usuarios
+INSERT INTO USERS (USERNAME, PASSWORD, ROL) VALUES
+('IT_user', 'IT1234', 'IT'),
+('Sup_user', 'Sup1234', 'Supervisor'),
+('Op_user', 'Op1234', 'Operator');

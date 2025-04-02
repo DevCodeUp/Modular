@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect
+from flask import Blueprint, render_template, request, redirect, jsonify, session, url_for
 from .queries import *
 import csv
 import io
@@ -7,30 +7,59 @@ main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
-  return render_template('index.html')
+    # Verificar si el usuario está autenticado
+    current_user = None
+    if 'employee_number' in session:
+        current_user = {
+            'employee_number': session['employee_number'],
+            'role': session['role']
+        }
+    # Pasar a la plantilla la información del usuario
+    return render_template('index.html', current_user=current_user)
 
 @main.route('/config')
 def config():
-  return render_template('config.html')
+    # Verificar si el usuario tiene el rol adecuado para acceder a la configuración
+    if 'role' not in session or session['role'] != 'IT':
+        # Si no tiene el rol adecuado, redirigirlo a la página principal o a un error
+        return redirect(url_for('main.index'))  # Redirige a la página principal (o una página de error)
+    
+    # Si tiene el rol adecuado, mostrar la página de configuración
+    return render_template('config.html')
 
-@main.route('/materia-prima')
-def materia_prima():
-  return render_template('materia_prima.html')
+@main.route('/inventory')
+def inventory():
+    # Verificar si el usuario tiene el rol adecuado para acceder a la configuración
+    if 'role' not in session or session['role'] not in ['Supervisor']:
+        # Si no tiene el rol adecuado, redirigirlo a la página principal o a un error
+        return redirect(url_for('main.index'))  # Redirige a la página principal (o una página de error)
+    
+    # Si tiene el rol adecuado, mostrar la página de configuración
+    return redirect(url_for('main.config_parameters', section='inventory'))
 
-@main.route('/producto-terminado')
-def producto_terminado():
-    return render_template('producto_terminado.html')
+@main.route('/store')
+def store():
+    # Verificar si el usuario tiene el rol adecuado para acceder a la configuración
+    if 'role' not in session or session['role'] not in ['Supervisor']:
+        # Si no tiene el rol adecuado, redirigirlo a la página principal o a un error
+        return redirect(url_for('main.index'))  # Redirige a la página principal (o una página de error)
+    
+    # Si tiene el rol adecuado, mostrar la página de configuración
+    return redirect(url_for('main.config_parameters', section='store'))
 
-@main.route('/plan-produccion')
-def plan_produccion():
-    return render_template('plan_produccion.html')
-
-@main.route('/production-order')
-def production_orders():
-  return render_template('production_orders.html')
+@main.route('/production')
+def production():
+    # Verificar si el usuario tiene el rol adecuado para acceder a la configuración
+    if 'role' not in session or session['role'] not in ['Supervisor']:
+        # Si no tiene el rol adecuado, redirigirlo a la página principal o a un error
+        return redirect(url_for('main.index'))  # Redirige a la página principal (o una página de error)
+    
+    # Si tiene el rol adecuado, mostrar la página de configuración
+    return redirect(url_for('main.config_parameters', section='production'))
 
 @main.route('/config-parameters/<string:section>')
 def config_parameters(section):
+
   titles = {
     'categories_resources': 'Categorías de Recursos',
     'catalogue_resources': 'Catálogo de Recursos',
@@ -41,7 +70,7 @@ def config_parameters(section):
     'equipment': 'Equipo/Maquinaria',
     'inventory': 'Materia Prima',
     'store' : 'Producto Terminado',
-    'production' : 'Producción en proceso',
+    'production' : 'Plan de producción',
     'sales': 'Ventas'
   }
   title_section = titles.get(section, 'Gestión General')
@@ -85,6 +114,9 @@ def config_parameters(section):
 
 @main.route('/upload-sales')
 def upload_sales():
+  if 'role' not in session or session['role'] != 'IT':
+    # Si no tiene el rol adecuado, redirigirlo a la página principal o a un error
+    return redirect(url_for('main.index'))  # Redirige a la página principal (o una página de error)
   
   title_section = "Histórico de ventas"
   table = "sales"
@@ -97,6 +129,10 @@ def upload_sales():
 
 @main.route('/save-data/<string:table_name>', methods=['POST'])
 def save_data(table_name):
+  if 'role' not in session or session['role'] != 'IT':
+    # Si no tiene el rol adecuado, redirigirlo a la página principal o a un error
+    return redirect(url_for('main.index'))  # Redirige a la página principal (o una página de error)
+  
   """
   Recibe los datos del formulario y la tabla como parámetro en la URL.
   """
@@ -117,6 +153,10 @@ def save_data(table_name):
 
 @main.route('/delete-item/<string:table_name>/<int:item_id>', methods=['POST'])
 def delete_item(table_name, item_id):
+  if 'role' not in session or session['role'] != 'IT':
+    # Si no tiene el rol adecuado, redirigirlo a la página principal o a un error
+    return redirect(url_for('main.index'))  # Redirige a la página principal (o una página de error)
+  
   """
   Elimina un elemento de la base de datos según su ID.
   """
@@ -137,6 +177,10 @@ def delete_item(table_name, item_id):
 
 @main.route('/update-data/<string:table_name>', methods=['POST'])
 def update_data(table_name):
+  if 'role' not in session or session['role'] != 'IT':
+    # Si no tiene el rol adecuado, redirigirlo a la página principal o a un error
+    return redirect(url_for('main.index'))  # Redirige a la página principal (o una página de error)
+  
   if request.method == 'POST':
     # Obtener datos del formulario
     form_data = request.form.to_dict()
@@ -154,6 +198,10 @@ def update_data(table_name):
     
 @main.route('/upload_csv/<string:table_name>', methods=['POST'])
 def upload_csv(table_name):
+    if 'role' not in session or session['role'] != 'IT':
+      # Si no tiene el rol adecuado, redirigirlo a la página principal o a un error
+      return redirect(url_for('main.index'))  # Redirige a la página principal (o una página de error)
+
     file = request.files.get('csv_file')
 
     if not file or not file.filename.endswith('.csv'):
@@ -176,3 +224,22 @@ def upload_csv(table_name):
     uploadFile(query, columns, data)
 
     return redirect(request.referrer)
+
+@main.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+
+    employee_number = data.get('employee_number')
+    password = data.get('password')
+
+    # Verificar el usuario y la contraseña
+    role = verify_user(employee_number, password)
+    
+    if role:
+        session['employee_number'] = employee_number
+        session['role'] = role
+        # Lógica de inicio de sesión exitoso
+        return jsonify(success=True, role=role)
+    else:
+        # Si las credenciales son incorrectas, devolver error
+        return jsonify(success=False), 401

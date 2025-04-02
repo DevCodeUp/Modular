@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, session
 from app import routes
 from app.stats import stats_api
 #from app.AI.routes_ai import ai_blueprint
