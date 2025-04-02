@@ -17,6 +17,14 @@ def config():
 def materia_prima():
   return render_template('materia_prima.html')
 
+@main.route('/producto-terminado')
+def producto_terminado():
+    return render_template('producto_terminado.html')
+
+@main.route('/plan-produccion')
+def plan_produccion():
+    return render_template('plan_produccion.html')
+
 @main.route('/production-order')
 def production_orders():
   return render_template('production_orders.html')
@@ -25,7 +33,7 @@ def production_orders():
 def config_parameters(section):
   titles = {
     'categories_resources': 'Categorías de Recursos',
-    'catalogue_resources': 'Catálogo de recursos',
+    'catalogue_resources': 'Catálogo de Recursos',
     'supplier': 'Proveedores',
     'categories_products': 'Categorías de Productos',
     'catalogue_products': 'Catálogo de Productos',

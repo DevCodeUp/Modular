@@ -5,12 +5,29 @@
   box-sizing: border-box;
 }
 
-/* Añadir estas líneas en la parte superior */
-html, body {
-  height: 100%;
+/* Centrar el botón de inicio de sesión */
+.login-container {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  margin-top: 100px;
 }
+
+#login-btn {
+  font-size: 18px;
+  padding: 16px 32px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+#login-btn:hover {
+  background-color: #0056b3;
+}
+
 
 /* Header */
 header {
@@ -29,14 +46,26 @@ header {
     font-size: 1.2em;
   }
 
-  /* Botón de inicio de sesión alineado a la derecha */
-  nav {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 30px;
-  }
+  /* Modificación del estilo del botón de inicio de sesión */
+.login-container {
+  margin-top: 20px;
+  text-align: right;
+}
+
+#login-btn {
+  font-size: 18px;
+  padding: 12px 24px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#login-btn:hover {
+  background-color: #0056b3;
+}
+
 
   .login-button {
     background-color: #4a90e2;
@@ -151,6 +180,7 @@ nav {
 
     li {
       list-style: none;
+      position: relative;
 
       a {
         color: #fff;
@@ -165,6 +195,29 @@ nav {
       a:hover {
         background-color: #eeee2d;
         color: #000000;
+      }
+
+      .submenu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #1f2d3d;
+        padding: 10px;
+        border-radius: 5px;
+        z-index: 1000;
+
+        li {
+          padding: 5px 0;
+
+          a {
+            padding: 5px 10px;
+          }
+        }
+      }
+
+      &:hover .submenu {
+        display: block;
       }
     }
   }
@@ -289,4 +342,17 @@ footer {
       font-size: 2em;
     }
   }
+
+  /* Ajustes para la gráfica de rendimiento */
+#chartRendimiento {
+  width: 100%;
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+canvas {
+  width: 100% !important;
+  height: 400px !important;
+}
+
 }

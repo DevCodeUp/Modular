@@ -153,7 +153,7 @@ def getSales():
     INNER JOIN PRODUCTS p ON p.ID = s.ID_PRODUCT ;
     """
     return getData(query)
-
+  
 # Función para obtener datos según la sección
 def get_table_data(section):
     """
@@ -384,4 +384,3 @@ def get_sales_data():
     except Exception as e:
         print(f"Error al obtener los datos: {e}")
         return None
-

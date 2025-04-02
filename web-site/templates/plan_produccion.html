@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Plan de Producción - Pastelería{% endblock %}
+
+{% block second_style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/plan_produccion.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <button id="add-plan-btn">Agregar Plan</button>
+  <div class="content">
+    <table id="planes-table">
+      <thead>
+        <tr>
+          <th>No. Plan</th>
+          <th>Producto</th>
+          <th>Cantidad</th>
+          <th>Fecha Producción</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Planes se agregarán dinámicamente aquí -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/plan_produccion.js') }}"></script>
+{% endblock %}
