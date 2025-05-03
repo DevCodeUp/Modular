@@ -1,6 +1,11 @@
 import os
 
-os.add_dll_directory('D:\\USUARIO\\Documents\\UdeG\\Modular\\web-site\\app\\Drivers\\IBM\\clidriver\\bin')
+#os.add_dll_directory('D:\\USUARIO\\Documents\\UdeG\\Modular\\web-site\\app\\Drivers\\IBM\\clidriver\\bin')
+# Usando una ruta relativa
+relative_path = os.path.join(os.getcwd(), 'app', 'Drivers', 'IBM', 'clidriver', 'bin')
+
+# Añadir la ruta relativa
+os.add_dll_directory(relative_path)
 
 import ibm_db
 
@@ -13,6 +18,7 @@ dsn = (
     "PORT=32304;"
     "SECURITY=SSL;"
     "SSLServerCertificate=D:\\USUARIO\\Documents\\UdeG\\Modular\\web-site\\app\\DigiCertGlobalRootCA.crt;"
+    #"SSLServerCertificate='./app/DigiCertGlobalRootCA.crt';"
     "UID=nfs41860;"
     "PWD=EkJyrZexV79yZRb4;"
 )

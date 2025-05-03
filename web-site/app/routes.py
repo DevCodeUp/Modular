@@ -20,7 +20,7 @@ def index():
 @main.route('/config')
 def config():
     # Verificar si el usuario tiene el rol adecuado para acceder a la configuración
-    if 'role' not in session or session['role'] != 'IT':
+    if 'role' not in session or (session['role'] != 'IT' and session['role'] != 'AdminRole'):
         # Si no tiene el rol adecuado, redirigirlo a la página principal o a un error
         return redirect(url_for('main.index'))  # Redirige a la página principal (o una página de error)
     
@@ -30,7 +30,7 @@ def config():
 @main.route('/inventory')
 def inventory():
     # Verificar si el usuario tiene el rol adecuado para acceder a la configuración
-    if 'role' not in session or session['role'] not in ['Supervisor']:
+    if 'role' not in session or (session['role'] not in ['Supervisor'] and session['role'] != 'AdminRole'):
         # Si no tiene el rol adecuado, redirigirlo a la página principal o a un error
         return redirect(url_for('main.index'))  # Redirige a la página principal (o una página de error)
     
@@ -40,7 +40,7 @@ def inventory():
 @main.route('/store')
 def store():
     # Verificar si el usuario tiene el rol adecuado para acceder a la configuración
-    if 'role' not in session or session['role'] not in ['Supervisor']:
+    if 'role' not in session or (session['role'] not in ['Supervisor'] and session['role'] != 'AdminRole'):
         # Si no tiene el rol adecuado, redirigirlo a la página principal o a un error
         return redirect(url_for('main.index'))  # Redirige a la página principal (o una página de error)
     
@@ -50,7 +50,7 @@ def store():
 @main.route('/production')
 def production():
     # Verificar si el usuario tiene el rol adecuado para acceder a la configuración
-    if 'role' not in session or session['role'] not in ['Supervisor']:
+    if 'role' not in session or (session['role'] not in ['Supervisor'] and session['role'] != 'AdminRole'):
         # Si no tiene el rol adecuado, redirigirlo a la página principal o a un error
         return redirect(url_for('main.index'))  # Redirige a la página principal (o una página de error)
     
@@ -114,7 +114,7 @@ def config_parameters(section):
 
 @main.route('/upload-sales')
 def upload_sales():
-  if 'role' not in session or session['role'] != 'IT':
+  if 'role' not in session or (session['role'] != 'IT' and session['role'] != 'AdminRole'):
     # Si no tiene el rol adecuado, redirigirlo a la página principal o a un error
     return redirect(url_for('main.index'))  # Redirige a la página principal (o una página de error)
   
@@ -127,9 +127,19 @@ def upload_sales():
     table=table
   )
 
+@main.route('/config-ai')
+def config_ai():
+  if 'role' not in session or (session['role'] != 'IT' and session['role'] != 'AdminRole'):
+    # Si no tiene el rol adecuado, redirigirlo a la página principal o a un error
+    return redirect(url_for('main.index'))  # Redirige a la página principal (o una página de error)
+  
+  return render_template(
+    'ai_dashboard.html'
+  )
+
 @main.route('/save-data/<string:table_name>', methods=['POST'])
 def save_data(table_name):
-  if 'role' not in session or session['role'] != 'IT':
+  if 'role' not in session or (session['role'] != 'IT' and session['role'] != 'AdminRole'):
     # Si no tiene el rol adecuado, redirigirlo a la página principal o a un error
     return redirect(url_for('main.index'))  # Redirige a la página principal (o una página de error)
   
@@ -153,7 +163,7 @@ def save_data(table_name):
 
 @main.route('/delete-item/<string:table_name>/<int:item_id>', methods=['POST'])
 def delete_item(table_name, item_id):
-  if 'role' not in session or session['role'] != 'IT':
+  if 'role' not in session or (session['role'] != 'IT' and session['role'] != 'AdminRole'):
     # Si no tiene el rol adecuado, redirigirlo a la página principal o a un error
     return redirect(url_for('main.index'))  # Redirige a la página principal (o una página de error)
   
@@ -177,7 +187,7 @@ def delete_item(table_name, item_id):
 
 @main.route('/update-data/<string:table_name>', methods=['POST'])
 def update_data(table_name):
-  if 'role' not in session or session['role'] != 'IT':
+  if 'role' not in session or (session['role'] != 'IT' and session['role'] != 'AdminRole'):
     # Si no tiene el rol adecuado, redirigirlo a la página principal o a un error
     return redirect(url_for('main.index'))  # Redirige a la página principal (o una página de error)
   
@@ -198,7 +208,7 @@ def update_data(table_name):
     
 @main.route('/upload_csv/<string:table_name>', methods=['POST'])
 def upload_csv(table_name):
-    if 'role' not in session or session['role'] != 'IT':
+    if 'role' not in session or (session['role'] != 'IT' and session['role'] != 'AdminRole'):
       # Si no tiene el rol adecuado, redirigirlo a la página principal o a un error
       return redirect(url_for('main.index'))  # Redirige a la página principal (o una página de error)
 
