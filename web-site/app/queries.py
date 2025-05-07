@@ -172,6 +172,18 @@ def getOrders():
         RESOURCES r ON o.ID_RESOURCE = r.ID;
     """
     return getData(query)
+
+def getEquipmentProduct(id_product):
+    query = f"""
+    SELECT 
+        ID,
+        ID_PRODUCT
+    FROM 
+        EQUIPMENT
+    WHERE ID_PRODUCT = '{id_product}';
+    """
+    data = getData(query)
+    return data[0]
   
 # Función para obtener datos según la sección
 def get_table_data(section):
