@@ -101,8 +101,8 @@ def getCatalogueProducts():
 
 def getFactories():
     query = """
-    SELECT id AS "ID", name AS "Fábrica", cod_postal AS "Código Postal",
-    address AS "Dirección", country AS "País", state AS "Estado"
+    SELECT id AS "ID", name AS "Fábrica", cod_postal AS "Código Postal", address AS "Dirección",
+    country AS "País", state AS "Estado"
     FROM factories
     """
     return getData(query)
@@ -111,9 +111,9 @@ def getEquipment():
     query = """
     SELECT 
     equ.id AS "ID",
+    equ.name AS "Máquina/Equipo",
     fac.name AS "Fábrica",
     pr.name_product AS "Producto Producido",
-    equ.name AS "Máquina/Equipo",
     TRIM(CHAR(DECIMAL(equ.min_prod, 10, 0))) || ' ' || equ.unit_measure AS "Mínimo de Producción",
     TRIM(CHAR(DECIMAL(equ.time, 10, 0))) || ' ' || equ.unit_time AS "Tiempo Necesario de Producción"
     FROM equipment equ
@@ -129,8 +129,8 @@ def getProduction():
     FROM EQUIPMENT e
     INNER JOIN PRODUCTS p ON e.ID_PRODUCT = p.ID
     )
-    SELECT p.ID AS "ID", e.NAME AS "Equipo/Máquina", e.NAME_PRODUCT AS "Producto fabricado", p."DATE" AS "Fecha",
-    p.QUANT_PROD AS "Cantidad a producir", p.UNIT_MEASURE AS "Unidad de medida", p."TIME" AS "Tiempo", p.UNIT_TIME AS "Unidad de tiempo"
+    SELECT p.ID AS "ID", e.NAME AS "Equipo/Máquina", p."DATE" AS "Fecha", p.QUANT_PROD AS "Cantidad a producir", p.UNIT_MEASURE AS "Unidad de medida",
+    p."TIME" AS "Tiempo",  p.UNIT_TIME AS "Unidad de tiempo", e.NAME_PRODUCT AS "Producto fabricado"
     FROM PRODUCTION p
     INNER JOIN cteEquipment e ON p.ID_EQUIPMENT = e.ID;
     """
@@ -145,12 +145,31 @@ def getStore():
     """
     return getData(query)
 
-def getSales():
+def getRecipes():
     query = """
-    SELECT s.ID AS "ID", p.NAME_PRODUCT AS "Producto", s.AMOUNT AS "Cantidad",
-    s.PRICE AS "Precio", s.DATE AS "Fecha de venta"
-    FROM SALES s
-    INNER JOIN PRODUCTS p ON p.ID = s.ID_PRODUCT ;
+    SELECT r.RECIPEID AS "ID", p.NAME_PRODUCT AS "Producto", re.NAME_RESOURCE AS "Recurso", r.QUANTITY AS "Cantidad", r.UNIT AS "Unidad de Medida"
+    FROM RECIPES r
+    INNER JOIN PRODUCTS p  ON p.ID = r.PRODUCTID
+    INNER JOIN RESOURCES re ON re.ID = r.RESOURCEID;
+    """
+    return getData(query)
+
+def getOrders():
+    query = """
+    SELECT 
+        o.ID, 
+        r.NAME_RESOURCE AS "Recurso", 
+        o.QUANTITY AS "Cantidad", 
+        o."DATE" AS "Fecha de solicitud", 
+        CASE 
+            WHEN o.DELIVERED = 1 THEN 'Solicitado'
+            WHEN o.DELIVERED = 0 THEN 'Entregado' 
+            ELSE 'Desconocido'
+        END AS "Status"
+    FROM 
+        ORDERS o
+    INNER JOIN 
+        RESOURCES r ON o.ID_RESOURCE = r.ID;
     """
     return getData(query)
   
@@ -170,7 +189,8 @@ def get_table_data(section):
         'equipment': getEquipment,
         'production': getProduction,
         'store': getStore,
-        'sales': getSales
+        'recipes': getRecipes,
+        'orders': getOrders
     }
 
     # Verifica si la sección existe en el diccionario

@@ -1,59 +1,47 @@
 import pandas as pd
-import matplotlib.pyplot as plt
-from statsmodels.tsa.stattools import adfuller
 from statsmodels.tsa.arima.model import ARIMA
+from datetime import datetime
 import math
 
-#file_path = './app/AI/sales_data_40000_records_with_quotes.csv'
-
 def trainModel(id_product, file_path):
-    # Cargar los datos
+    # Cargar datos
     sales_data = pd.read_csv(file_path)
 
-    # Limpiar la columna 'DATE' para eliminar las comillas
+    # Limpiar y convertir fechas
     sales_data['DATE'] = sales_data['DATE'].str.replace("'", "")
-
-    # Convertir la columna 'DATE' a formato datetime
     sales_data['DATE'] = pd.to_datetime(sales_data['DATE'], format='%Y-%m-%d %H:%M:%S')
 
-    # Agregar las ventas por producto y mes
-    sales_data['Year_Month'] = sales_data['DATE'].dt.to_period('M')  # Extraer el año y mes como periodo
-    monthly_sales = sales_data.groupby(['ID_PRODUCT', 'Year_Month'])['AMOUNT'].sum().reset_index()
+    # Agrupar por día
+    sales_data['Day'] = sales_data['DATE'].dt.to_period('D')
+    daily_sales = sales_data.groupby(['ID_PRODUCT', 'Day'])['AMOUNT'].sum().reset_index()
 
-    # Seleccionar los datos de ventas para un producto específico (por ejemplo, producto con ID 1)
-    product_sales = monthly_sales[monthly_sales['ID_PRODUCT'] == id_product].set_index('Year_Month')['AMOUNT']
+    # Filtrar producto y formatear índice
+    product_sales = daily_sales[daily_sales['ID_PRODUCT'] == id_product].set_index('Day')['AMOUNT']
+    product_sales.index = product_sales.index.to_timestamp()
 
-    # Realizar la prueba ADF para comprobar la estacionariedad
-    adf_result = adfuller(product_sales.dropna())  # Eliminar valores NaN antes de aplicar la prueba
-    adf_statistic, p_value = adf_result[0], adf_result[1]
-
-    # Imprimir los resultados de la prueba ADF
-    print(f"Estadístico ADF: {adf_statistic}")
-    print(f"P-valor: {p_value}")
-
-    # Si el p-valor es pequeño, podemos rechazar la hipótesis nula de que la serie tiene una raíz unitaria
-    if p_value < 0.05:
-        print("La serie temporal es estacionaria. Podemos aplicar ARIMA.")
-    else:
-        print("La serie temporal no es estacionaria. Se deben tomar pasos adicionales.")
-
-    # Crear el modelo ARIMA y ajustarlo
-    model = ARIMA(product_sales, order=(1, 0, 1))  # Parámetros del modelo (p=1, d=0, q=1)
+    # Entrenar modelo ARIMA
+    model = ARIMA(product_sales, order=(1, 1, 1))
     model_fitted = model.fit()
 
-    # Predecir las ventas para el siguiente mes
-    forecast = model_fitted.forecast(steps=1)
-    forecast_value = math.ceil(forecast[0])
-    return forecast_value, product_sales
+    # Calcular cuántos días quedan en el mes actual
+    today = pd.Timestamp(datetime.today().date())
+    last_day_of_month = today.replace(day=1) + pd.offsets.MonthEnd(1)
+    days_remaining = (last_day_of_month - today).days + 1
 
-    # Imprimir la predicción
-    #print(f"Predicción de ventas para el siguiente mes: {forecast_value}")
+    # Predecir
+    forecast = model_fitted.forecast(steps=days_remaining)
+    forecast.index = pd.date_range(start=today, periods=days_remaining, freq='D')
 
-    # Graficar la serie temporal para visualizar las ventas
-    #product_sales.plot(figsize=(10, 6))
-    #plt.title("Ventas mensuales para el Producto ID")
-    #plt.xlabel("Año-Mes")
-    #plt.ylabel("Cantidad Vendida")
-    #plt.xticks(rotation=45)
-    #plt.grid(True)
-    #plt.show()
+    # Redondear hacia arriba
+    forecast_rounded = forecast.apply(math.ceil)
+
+    # Sumar valores
+    forecast_total = int(forecast_rounded.sum())
+
+    return forecast_rounded, forecast_total
+
+# Ejemplo de prueba (comentarlo en producción)
+#if __name__ == "__main__":
+#    forecast, total, series = trainModel(1, "./app/AI/sales_data_40000_records_with_quotes.csv")
+#    print(forecast)
+#    print("Total del mes:", total)

@@ -1,10 +1,7 @@
 from flask import Blueprint, jsonify, render_template, request, redirect
 import os
 from werkzeug.utils import secure_filename
-import matplotlib.pyplot as plt
-import io
-import base64
-from .trainModelAI import trainModel
+from .trainModelAI import *
 
 ai_blueprint = Blueprint('ai', __name__)
 UPLOAD_FOLDER = './app/AI'
@@ -26,55 +23,35 @@ def train_model():
 
     filename = secure_filename(file.filename)
     filepath = os.path.join(UPLOAD_FOLDER, filename)
-    #file.save(filepath)
+    file.save(filepath)
 
-    # Cargar el CSV completo
-    import pandas as pd
+    # Obtener productos únicos
     sales_data = pd.read_csv(filepath)
-
-    # Limpiar y procesar fechas
     sales_data['DATE'] = sales_data['DATE'].str.replace("'", "")
     sales_data['DATE'] = pd.to_datetime(sales_data['DATE'], format='%Y-%m-%d %H:%M:%S')
-    sales_data['Year_Month'] = sales_data['DATE'].dt.to_period('M')
-
-    # Obtener todos los productos únicos
     product_ids = sales_data['ID_PRODUCT'].unique()
 
     resultados = []
 
     for pid in product_ids:
         try:
-            forecast, series = trainModel(pid, filepath)
-
-            # Generar gráfica
-            import matplotlib.pyplot as plt
-            import io, base64
-
-            fig, ax = plt.subplots(figsize=(8, 3))
-            series.plot(ax=ax)
-            ax.set_title(f"Producto {pid}")
-            ax.set_xlabel("Mes")
-            ax.set_ylabel("Ventas")
-            plt.tight_layout()
-
-            buf = io.BytesIO()
-            plt.savefig(buf, format="png")
-            buf.seek(0)
-            img_base64 = base64.b64encode(buf.read()).decode('utf-8')
-            plt.close(fig)
+            forecast, forecast_total = trainModel(pid, filepath)
 
             resultados.append({
                 'product_id': int(pid),
-                'forecast': int(forecast),
-                'chart': img_base64
+                'forecast_total': int(forecast_total),
+                'forecast_values': [round(v, 0) for v in forecast]
             })
 
         except Exception as e:
             resultados.append({
                 'product_id': int(pid),
-                'forecast': 'error',
+                'forecast_total': 'error',
                 'error': str(e)
             })
-
+    
+    # Eliminar el archivo después del procesamiento
+    if os.path.exists(filepath):
+        os.remove(filepath)
+        
     return jsonify(resultados)
-

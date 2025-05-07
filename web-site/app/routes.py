@@ -27,36 +27,6 @@ def config():
     # Si tiene el rol adecuado, mostrar la página de configuración
     return render_template('config.html')
 
-@main.route('/inventory')
-def inventory():
-    # Verificar si el usuario tiene el rol adecuado para acceder a la configuración
-    if 'role' not in session or (session['role'] not in ['Supervisor'] and session['role'] != 'AdminRole'):
-        # Si no tiene el rol adecuado, redirigirlo a la página principal o a un error
-        return redirect(url_for('main.index'))  # Redirige a la página principal (o una página de error)
-    
-    # Si tiene el rol adecuado, mostrar la página de configuración
-    return redirect(url_for('main.config_parameters', section='inventory'))
-
-@main.route('/store')
-def store():
-    # Verificar si el usuario tiene el rol adecuado para acceder a la configuración
-    if 'role' not in session or (session['role'] not in ['Supervisor'] and session['role'] != 'AdminRole'):
-        # Si no tiene el rol adecuado, redirigirlo a la página principal o a un error
-        return redirect(url_for('main.index'))  # Redirige a la página principal (o una página de error)
-    
-    # Si tiene el rol adecuado, mostrar la página de configuración
-    return redirect(url_for('main.config_parameters', section='store'))
-
-@main.route('/production')
-def production():
-    # Verificar si el usuario tiene el rol adecuado para acceder a la configuración
-    if 'role' not in session or (session['role'] not in ['Supervisor'] and session['role'] != 'AdminRole'):
-        # Si no tiene el rol adecuado, redirigirlo a la página principal o a un error
-        return redirect(url_for('main.index'))  # Redirige a la página principal (o una página de error)
-    
-    # Si tiene el rol adecuado, mostrar la página de configuración
-    return redirect(url_for('main.config_parameters', section='production'))
-
 @main.route('/config-parameters/<string:section>')
 def config_parameters(section):
 
@@ -71,7 +41,8 @@ def config_parameters(section):
     'inventory': 'Materia Prima',
     'store' : 'Producto Terminado',
     'production' : 'Plan de producción',
-    'sales': 'Ventas'
+    'orders': 'Ordenes de Compra',
+    'recipes': 'Estructura de productos (MRP)'
   }
   title_section = titles.get(section, 'Gestión General')
 
@@ -86,7 +57,8 @@ def config_parameters(section):
     'inventory' : 'inventory',
     'store' : 'store',
     'production' : 'production',
-    'sales': 'sales'
+    'orders': 'orders',
+    'recipes': 'recipes'
   }
   table = tables.get(section)
 
@@ -112,37 +84,8 @@ def config_parameters(section):
     table=table
   )
 
-@main.route('/upload-sales')
-def upload_sales():
-  if 'role' not in session or (session['role'] != 'IT' and session['role'] != 'AdminRole'):
-    # Si no tiene el rol adecuado, redirigirlo a la página principal o a un error
-    return redirect(url_for('main.index'))  # Redirige a la página principal (o una página de error)
-  
-  title_section = "Histórico de ventas"
-  table = "sales"
-  
-  return render_template(
-    'sales.html',
-    title_section=title_section,
-    table=table
-  )
-
-@main.route('/config-ai')
-def config_ai():
-  if 'role' not in session or (session['role'] != 'IT' and session['role'] != 'AdminRole'):
-    # Si no tiene el rol adecuado, redirigirlo a la página principal o a un error
-    return redirect(url_for('main.index'))  # Redirige a la página principal (o una página de error)
-  
-  return render_template(
-    'ai_dashboard.html'
-  )
-
 @main.route('/save-data/<string:table_name>', methods=['POST'])
 def save_data(table_name):
-  if 'role' not in session or (session['role'] != 'IT' and session['role'] != 'AdminRole'):
-    # Si no tiene el rol adecuado, redirigirlo a la página principal o a un error
-    return redirect(url_for('main.index'))  # Redirige a la página principal (o una página de error)
-  
   """
   Recibe los datos del formulario y la tabla como parámetro en la URL.
   """
@@ -163,10 +106,6 @@ def save_data(table_name):
 
 @main.route('/delete-item/<string:table_name>/<int:item_id>', methods=['POST'])
 def delete_item(table_name, item_id):
-  if 'role' not in session or (session['role'] != 'IT' and session['role'] != 'AdminRole'):
-    # Si no tiene el rol adecuado, redirigirlo a la página principal o a un error
-    return redirect(url_for('main.index'))  # Redirige a la página principal (o una página de error)
-  
   """
   Elimina un elemento de la base de datos según su ID.
   """
@@ -187,10 +126,6 @@ def delete_item(table_name, item_id):
 
 @main.route('/update-data/<string:table_name>', methods=['POST'])
 def update_data(table_name):
-  if 'role' not in session or (session['role'] != 'IT' and session['role'] != 'AdminRole'):
-    # Si no tiene el rol adecuado, redirigirlo a la página principal o a un error
-    return redirect(url_for('main.index'))  # Redirige a la página principal (o una página de error)
-  
   if request.method == 'POST':
     # Obtener datos del formulario
     form_data = request.form.to_dict()

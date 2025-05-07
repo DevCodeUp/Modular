@@ -4,6 +4,8 @@ function confirmUpload() {
     const fileInput = form.querySelector('input[type="file"]');
     const file = fileInput.files[0];
 
+    const formAdd = document.getElementById
+
     if (!file || !file.name.endsWith('.csv')) {
         alert("Por favor selecciona un archivo CSV válido.");
         return;
@@ -21,26 +23,19 @@ function confirmUpload() {
     })
     .then(resultados => {
         const forecastElement = document.getElementById('progressInfo');
-        const chartContainer = document.getElementById('purchaseOrders');
 
         forecastElement.innerHTML = '';
-        chartContainer.innerHTML = '';
 
         resultados.forEach(result => {
             if (result.forecast === 'error') {
                 forecastElement.innerHTML += `<p><strong>Producto ${result.product_id}:</strong> Error: ${result.error}</p>`;
             } else {
-                forecastElement.innerHTML += `<p><strong>Producto ${result.product_id}:</strong> Predicción: ${result.forecast}</p>`;
-                chartContainer.innerHTML += `
-                    <div style="margin-bottom: 20px;">
-                        <img src="data:image/png;base64,${result.chart}" style="max-width:100%;">
-                    </div>
-                `;
+                forecastElement.innerHTML += `<p><strong>Producto ${result.product_id}:</strong> Predicción: ${result.forecast_total}</p>`;
             }
         });
     })
     .catch(error => {
         console.error(error);
-        alert("Ocurrió un error durante el entrenamiento.");
+        alert(error);
     });
 }

@@ -24,17 +24,22 @@
     <nav id="navbar">
       <ul id="nav-list" style="display: {% if current_user %} flex {% else %} none {% endif %};">
           <li><a href="{{ url_for('main.index') }}" class="nav-button">Inicio</a></li>
+          {% if current_user and current_user.role in ['AdminRole', 'Supervisor'] %}
           <li>
               <a href="#" class="nav-button" id="product-menu">Producto</a>
               <ul class="submenu" id="product-submenu">
-                  <li><a href="{{ url_for('main.inventory') }}" class="nav-button product-link">Materia prima</a></li>
-                  <li><a href="{{ url_for('main.store') }}" class="nav-button product-link">Producto terminado</a></li>
-                  <li><a href="{{ url_for('main.production') }}" class="nav-button product-link">Plan de producción</a></li>
+                <li><a href="{{ url_for('main.config_parameters', section='inventory') }}" class="nav-button product-link">Materia prima</a></li>
+                <li><a href="{{ url_for('main.config_parameters', section='store') }}" class="nav-button product-link">Producto terminado</a></li>
+                <li><a href="{{ url_for('main.config_parameters', section='production') }}" class="nav-button product-link">Plan de producción</a></li>
+                <li><a href="{{ url_for('main.config_parameters', section='orders') }}" class="nav-button product-link">Órdenes de compra</a></li>
               </ul>
           </li>
+          {% endif %}
           <li><a href="{{ url_for('stats_api.dashboard') }}" class="nav-button" id="statistics-link">Estadísticas</a></li>
+          {% if current_user and current_user.role in ['AdminRole', 'IT'] %}
           <li><a href="{{ url_for('main.config') }}" class="nav-button" id="config-link">Configuración</a></li>
-      </ul>
+          {% endif %}
+        </ul>
     </nav>
   </header>
 

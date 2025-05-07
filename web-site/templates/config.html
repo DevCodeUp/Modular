@@ -25,11 +25,6 @@
         <h3>Proveedores</h3>
       </a>
     </div>
-    <div class="card">
-      <a href="{{ url_for('main.config_parameters', section='inventory') }}">
-        <h3>Materia Prima</h3>
-      </a>
-    </div>
   </div>
 </section>
 
@@ -44,11 +39,6 @@
     <div class="card">
       <a href="{{ url_for('main.config_parameters', section='catalogue_products') }}">
         <h3>Catálogo de Productos</h3>
-      </a>
-    </div>
-    <div class="card">
-      <a href="{{ url_for('main.config_parameters', section='store') }}">
-        <h3>Producto Terminado</h3>
       </a>
     </div>
   </div>
@@ -68,49 +58,8 @@
       </a>
     </div>
     <div class="card">
-      <a href="{{ url_for('main.config_parameters', section='production') }}">
-        <h3>Producción en Proceso</h3>
-      </a>
-    </div>
-  </div>
-</section>
-
-<section class="group" id="mrp">
-  <h2>Gestión de MRP</h2>
-  <div class="card-container">
-    <div class="card">
-      <a href="{{ url_for('main.config_parameters', section='mrp') }}">
-        <h3>Estructura de Productos (BOM)</h3>
-      </a>
-    </div>
-    <div class="card">
-      <a href="{{ url_for('main.config_parameters', section='mrp') }}">
-        <h3>Plan de Producción</h3>
-      </a>
-    </div>
-  </div>
-</section>
-
-<section class="group" id="system">
-  <h2>Sistema</h2>
-  <div class="card-container">
-    <div class="card">
-    </div>
-    <div class="card">
-      <a href="{{ url_for('main.upload_sales') }}">
-        <h3>Registro de ventas</h3>
-      </a>
-    </div>
-  </div>
-  </div>
-</section>
-
-<section class="group" id="mrp">
-  <h2>Gestión de MRP</h2>
-  <div class="card-container">
-    <div class="card">
-      <a href="{{ url_for('main.config_parameters', section='mrp') }}">
-        <h3>Estructura de Productos (BOM)</h3>
+      <a href="{{ url_for('main.config_parameters', section='recipes') }}">
+        <h3>Estructura de Productos (MRP)</h3>
       </a>
     </div>
   </div>
