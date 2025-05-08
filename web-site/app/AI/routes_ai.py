@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, render_template, request, redirect
 import os
 from werkzeug.utils import secure_filename
 from .trainModelAI import *
+from ..queries import addItem, getEquipmentProduct
 
 ai_blueprint = Blueprint('ai', __name__)
 UPLOAD_FOLDER = './app/AI'
@@ -39,9 +40,26 @@ def train_model():
 
             resultados.append({
                 'product_id': int(pid),
-                'forecast_total': int(forecast_total),
-                'forecast_values': [round(v, 0) for v in forecast]
+                'forecast_total': int(forecast_total)
             })
+
+            # Iterar sobre cada elemento de forecast y ejecutar la función addItem
+            for forecast_date, forecast_value in forecast.items():
+                # Aquí definimos los datos que se van a insertar
+                col = ['ID_EQUIPMENT', 'DATE', 'QUANT_PROD', 'UNIT_MEASURE', 'TIME', 'UNIT_TIME']
+                information = {
+                    'ID_EQUIPMENT': str(getEquipmentProduct(pid)),  # Asumiendo que esta función está definida
+                    'DATE': forecast_date.strftime('%Y-%m-%d'),  # Formato de fecha
+                    'QUANT_PROD': str(forecast_value),
+                    'UNIT_MEASURE': 'pz',
+                    'TIME': str(8),  # Tiempo de fabricación (siempre es 8)
+                    'UNIT_TIME': 'h',  # Unidad de tiempo (siempre 'h')
+                }
+                
+                # Llamar a la función addItem para insertar los datos en la base de datos
+                success = addItem('production', col, information)  # 'production' es el nombre de la tabla
+                if not success:
+                    print(f"Error al insertar la predicción para el producto {pid} y fecha {forecast_date}")
 
         except Exception as e:
             resultados.append({

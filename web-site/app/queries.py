@@ -183,7 +183,7 @@ def getEquipmentProduct(id_product):
     WHERE ID_PRODUCT = '{id_product}';
     """
     data = getData(query)
-    return data[0]
+    return data['ID'].iloc[0]
   
 # Función para obtener datos según la sección
 def get_table_data(section):

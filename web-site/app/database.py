@@ -4,6 +4,9 @@ import os
 # Usando una ruta relativa
 relative_path = os.path.join(os.getcwd(), 'app', 'Drivers', 'IBM', 'clidriver', 'bin')
 
+# Ruta relativa al certificado SSL
+SSL_CERT_PATH = os.path.join(os.getcwd(), 'app', 'DigiCertGlobalRootCA.crt')
+
 # Añadir la ruta relativa
 os.add_dll_directory(relative_path)
 
@@ -17,8 +20,8 @@ dsn = (
     "HOSTNAME=b1bc1829-6f45-4cd4-bef4-10cf081900bf.c1ogj3sd0tgtu0lqde00.databases.appdomain.cloud;"
     "PORT=32304;"
     "SECURITY=SSL;"
-    "SSLServerCertificate=D:\\USUARIO\\Documents\\UdeG\\Modular\\web-site\\app\\DigiCertGlobalRootCA.crt;"
-    #"SSLServerCertificate='./app/DigiCertGlobalRootCA.crt';"
+    #"SSLServerCertificate=D:\\USUARIO\\Documents\\UdeG\\Modular\\web-site\\app\\DigiCertGlobalRootCA.crt;"
+    f"SSLServerCertificate={SSL_CERT_PATH};"
     "UID=nfs41860;"
     "PWD=EkJyrZexV79yZRb4;"
 )
