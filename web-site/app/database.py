@@ -4,11 +4,12 @@ import os
 # Usando una ruta relativa
 relative_path = os.path.join(os.getcwd(), 'app', 'Drivers', 'IBM', 'clidriver', 'bin')
 
+
 # Ruta relativa al certificado SSL
 SSL_CERT_PATH = os.path.join(os.getcwd(), 'app', 'DigiCertGlobalRootCA.crt')
 
 # Añadir la ruta relativa
-os.add_dll_directory(relative_path)
+#os.add_dll_directory(relative_path)
 
 import ibm_db
 
