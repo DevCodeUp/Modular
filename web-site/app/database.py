@@ -1,30 +1,43 @@
-from psycopg2 import pool
+import os
 
-# Configuración para el pool de conexiones
-db_pool = pool.SimpleConnectionPool(
-    1,  # Mínimo de conexiones en el pool
-    10,  # Máximo de conexiones en el pool
-    host="localhost",
-    database="modular",
-    user="postgres",
-    password="1234",
-    port=5432
+#os.add_dll_directory('D:\\USUARIO\\Documents\\UdeG\\Modular\\web-site\\app\\Drivers\\IBM\\clidriver\\bin')
+# Usando una ruta relativa
+relative_path = os.path.join(os.getcwd(), 'app', 'Drivers', 'IBM', 'clidriver', 'bin')
+
+# Ruta relativa al certificado SSL
+SSL_CERT_PATH = os.path.join(os.getcwd(), 'app', 'DigiCertGlobalRootCA.crt')
+
+# Añadir la ruta relativa
+os.add_dll_directory(relative_path)
+
+import ibm_db
+
+conn_str='database=bludb;hostname=b1bc1829-6f45-4cd4-bef4-10cf081900bf.c1ogj3sd0tgtu0lqde00.databases.appdomain.cloud;port=32304;protocol=tcpip;uid=nfs41860;pwd=EkJyrZexV79yZRb4'
+
+
+dsn = (
+    "DATABASE=bludb;"
+    "HOSTNAME=b1bc1829-6f45-4cd4-bef4-10cf081900bf.c1ogj3sd0tgtu0lqde00.databases.appdomain.cloud;"
+    "PORT=32304;"
+    "SECURITY=SSL;"
+    #"SSLServerCertificate=D:\\USUARIO\\Documents\\UdeG\\Modular\\web-site\\app\\DigiCertGlobalRootCA.crt;"
+    f"SSLServerCertificate={SSL_CERT_PATH};"
+    "UID=nfs41860;"
+    "PWD=EkJyrZexV79yZRb4;"
 )
 
+# Función para establecer conexión con DB2
 def get_db_connection():
-    """
-    Obtiene una conexión desde el pool.
-    """
     try:
-        return db_pool.getconn()
+        conn = ibm_db.connect(dsn, "", "")
+        return conn
     except Exception as e:
         raise Exception(f"Error al obtener la conexión a la base de datos: {e}")
 
-def release_db_connection(connection):
-    """
-    Libera la conexión al pool.
-    """
-    try:
-        db_pool.putconn(connection)
-    except Exception as e:
-        raise Exception(f"Error al liberar la conexión: {e}")
+# Función para cerrar la conexión con DB2
+def close_db_connection(conn):
+    if conn:
+        try:
+            ibm_db.close(conn)
+        except Exception as e:
+            raise Exception(f"Error al cerrar la conexión a la base de datos: {e}")

@@ -31,7 +31,6 @@ header {
   /* Navigation Menu */
   nav {
     background-color: #1f2d3d;
-    margin-top: 30px;
 
     ul {
       display: flex;
@@ -40,6 +39,7 @@ header {
 
       li {
         list-style: none;
+        position: relative;
 
         a {
           color: #fff;
@@ -55,11 +55,34 @@ header {
           background-color: #eeee2d;
           color: #000000;
         }
+
+        .submenu {
+          display: none;
+          position: absolute;
+          top: 100%;
+          left: 0;
+          background-color: #1f2d3d;
+          padding: 10px;
+          border-radius: 5px;
+          z-index: 1000;
+
+          li {
+            padding: 5px 0;
+
+            a {
+              padding: 5px 10px;
+            }
+          }
+        }
+
+        &:hover .submenu {
+          display: block;
+        }
       }
     }
   }
 
-  /* Floating menu for smaller screens */
+    /* Floating menu for smaller screens */
   .menu-icon {
     display: none;
     font-size: 2em;
@@ -95,15 +118,14 @@ header {
   nav ul.show {
     display: flex;
   }
+
+  /* Body */
+  body {
+    font-family: 'Lato', sans-serif;
+    background-color: #f2f2f2;
+    color: #333;
+  }   
 }
-/* Body */
-body {
-  font-family: 'Lato', sans-serif;
-  background-color: #f2f2f2;
-  color: #333;
-}
-    
-    
       
 /* Footer */
 footer {

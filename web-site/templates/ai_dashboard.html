@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Entrenamiento de IA{% endblock %}
+
+{% block second_style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/ai_dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<h2>Entrenamiento de IA para Predicción y Planeación de Producción</h2>
+
+<section class="content">
+    <div class="button-group">
+        <form id="csv-upload-form" action="{{ url_for('ai.train_model') }}" method="POST" enctype="multipart/form-data">
+            <input type="file" name="csv_file" accept=".csv" required>
+            <button type="button" class="button" onclick="confirmUpload()">Subir CSV</button>
+        </form>
+    </div>
+</section>
+
+<!-- Información de Progreso -->
+<div id="progressInfo" style="text-align: center; margin-top: 20px; font-size: 1.2em;"></div>
+
+
+
+
+<script src="{{ url_for('static', filename='js/ai_dashboard.js') }}"></script>
+
+{% endblock %}

@@ -36,7 +36,7 @@ main {
 }
 
 /*Button add item*/
-.button {
+.add-button {
   float: right;
   margin: 20px;
   position: relative;
@@ -49,17 +49,17 @@ main {
   background-color: #3aa856;
 }
 
-.button, .button__icon, .button__text {
+.add-button, .button__icon, .button__text {
   transition: all 0.3s;
 }
 
-.button .button__text {
+.add-button .button__text {
   transform: translateX(30px);
   color: #fff;
   font-weight: 600;
 }
 
-.button .button__icon {
+.add-button .button__icon {
   position: absolute;
   transform: translateX(109px);
   height: 100%;
@@ -70,29 +70,29 @@ main {
   justify-content: center;
 }
 
-.button .svg {
+.add-button .svg {
   width: 30px;
   stroke: #fff;
 }
 
-.button:hover {
+.add-button:hover {
   background: #34974d;
 }
 
-.button:hover .button__text {
+.add-button:hover .button__text {
   color: transparent;
 }
 
-.button:hover .button__icon {
+.add-button:hover .button__icon {
   width: 148px;
   transform: translateX(0);
 }
 
-.button:active .button__icon {
+.add-button:active .button__icon {
   background-color: #2e8644;
 }
 
-.button:active {
+.add-button:active {
   border: 1px solid #2e8644;
 }
 
@@ -252,6 +252,7 @@ table td:last-child, table th:last-child {
 }
 
 /* Formulario flotante */
+/* Overlay de fondo */
 .overlay {
   position: fixed;
   top: 0;
@@ -265,48 +266,291 @@ table td:last-child, table th:last-child {
   z-index: 1000;
 }
 
+/* Ocultar formulario */
 .hidden {
   display: none;
 }
 
+/* Contenedor del formulario (transparente y centrado) */
 .form-container {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+  position: relative;
+}
+
+/* Formulario */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
   width: 90%;
   max-width: 500px;
-}
-
-form h3 {
-  margin-bottom: 15px;
-  font-size: 1.5em;
-  color: #333;
-}
-
-form label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-form input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-form button {
-  background-color: #2b3e50;
+  padding: 30px;
+  border-radius: 20px;
+  position: relative;
+  background-color: rgba(26, 26, 26, 0.9);
   color: #fff;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  border: 1px solid #333;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-form button:hover {
-  background-color: #1f2d3d;
+/* Botón de cierre */
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+  color: #00bfff;
+}
+
+/* Título del formulario con efecto */
+.title {
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -1px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-left: 30px;
+  color: #00bfff;
+}
+
+.title::before,
+.title::after {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  left: 0px;
+  background-color: #00bfff;
+}
+
+.title::after {
+  animation: pulse 1s linear infinite;
+}
+
+/* Mensaje y enlace */
+.message,
+.signin {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.signin {
+  text-align: center;
+}
+
+.signin a {
+  color: #00bfff;
+}
+
+.signin a:hover {
+  text-decoration: underline royalblue;
+}
+
+/* Diseño en flex para nombre y apellido */
+.flex {
+  display: flex;
+  width: 100%;
+  gap: 10px;
+}
+
+/* Estilo de los campos de entrada */
+.form label {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Estilos generales para inputs, selects y textareas */
+.form label .input,
+.form label select,
+.form label textarea {
+  background-color: #333;
+  color: #fff;
+  width: 100%;
+  padding: 18px 10px 8px;
+  outline: none;
+  border: 1px solid rgba(105, 105, 105, 0.5);
+  border-radius: 10px;
+  font-size: 18px;
+  line-height: 1.5;
+  transition: border 0.3s ease;
+  appearance: none; /* Oculta flechas en select */
+}
+
+/* Estilo al enfocar */
+.form label .input:focus,
+.form label select:focus,
+.form label textarea:focus {
+  border-color: #00bfff;
+}
+
+/* Placeholder flotante en inputs y textareas */
+.form label .input + span,
+.form label textarea + span {
+  color: rgba(255, 255, 255, 0.5);
+  position: absolute;
+  left: 10px;
+  top: 12px;
+  font-size: 0.9em;
+  cursor: text;
+  transition: 0.3s ease;
+}
+
+.form label .input:placeholder-shown + span,
+.form label textarea:placeholder-shown + span {
+  top: 20px;
+  font-size: 1em;
+}
+
+.form label .input:focus + span,
+.form label textarea:focus + span {
+  color: #00bfff;
+  top: 5px;
+  font-size: 0.75em;
+  font-weight: 600;
+}
+
+/* Ajuste especial para selects: el texto siempre aparecerá arriba */
+.form label select + span {
+  position: absolute;
+  left: 10px;
+  top: 5px; /* Forzar que aparezca arriba siempre */
+  font-size: 0.75em;
+  font-weight: 600;
+  color: #00bfff;
+  transition: none; /* No necesita animación */
+}
+
+/* Botón de envío */
+.submit {
+  border: none;
+  outline: none;
+  padding: 15px;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 18px;
+  background-color: #00bfff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.submit:hover {
+  background-color: rgba(0, 191, 255, 0.6);
+}
+
+/* Animación de pulsación */
+@keyframes pulse {
+  from {
+      transform: scale(0.9);
+      opacity: 1;
+  }
+  to {
+      transform: scale(1.8);
+      opacity: 0;
+  }
+}
+
+
+/* Estilos generales para el formulario de subida CSV */
+#csv-upload-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    margin-top: 40px;  /* Aseguramos que esté en la parte superior */
+    margin-bottom: 40px; /* Espacio adicional debajo */
+    text-align: center;
+}
+
+/* Estilo para el título de la sección de subida */
+#csv-upload-form h3 {
+    font-size: 24px;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Estilo para el campo de selección de archivo */
+#csv-upload-form input[type="file"] {
+    padding: 12px;
+    font-size: 16px;
+    color: #333;
+    border: 2px solid #34974d;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    margin-bottom: 20px;
+    width: 100%;
+    cursor: pointer;
+}
+
+/* Botón para subir el archivo CSV */
+#csv-upload-form button {
+    padding: 12px 24px;
+    background-color: #34974d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Efecto de hover para el botón */
+#csv-upload-form button:hover {
+    background-color: #2e8644;
+}
+
+/* Estilo para el grupo de botones, asegurando que estén alineados de forma centrada */
+.button-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+}
+
+/* Diseño en línea para los botones de subida */
+.button-group .button {
+    background-color: #0078d7;
+    color: #fff;
+    padding: 12px 30px;
+    font-size: 16px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+
+/* Efecto de hover para el botón en el grupo */
+.button-group .button:hover {
+    background-color: #0056a6;
+}
+
+/* Añadir espacio adicional para los campos de texto e inputs */
+.form-container input,
+.form-container textarea,
+.form-container select {
+    margin: 10px 0;
 }

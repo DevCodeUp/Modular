@@ -3,51 +3,66 @@ const parameter = section;
 
 // Referencias a elementos HTML
 const addItemButton = document.getElementById('add-item-button');
-const formOverlay = document.getElementById('form-overlay');
+const formOverlayAdd = document.getElementById('form-overlay-add');
+const formOverlayEdit = document.getElementById('form-overlay-edit');
 const formFields = document.getElementById('form-fields');
-const cancelButton = document.getElementById('cancel-button');
+const cancelButtonAdd = document.getElementById('close-form-add');
 
-// Mostrar el formulario al hacer clic en el botón
+// Mostrar formulario flotante Add Item al presionar el botón
 addItemButton.addEventListener('click', () => {
-    alert(fields);
-    // Generar los campos dinámicamente desde la variable "fields"
-    //formFields.innerHTML = fields.map(field => `
-    //    <div class="form-field">
-    //        <label for="${field.name}">${field.label}:</label>
-    //        <input type="${field.type || 'text'}" id="${field.name}" name="${field.name}" placeholder="${field.label}" required>
-    //    </div>
-    //`).join('');
-
-    // Mostrar el formulario flotante
-    //formOverlay.classList.remove('hidden');
+    formOverlayAdd.classList.remove('hidden');
 });
 
-// Ocultar el formulario al hacer clic en cancelar
-cancelButton.addEventListener('click', () => {
-    formOverlay.classList.add('hidden');
+// Ocultar formulario flotante Add Item al presionar "Cancelar"
+cancelButtonAdd.addEventListener('click', () => {
+    formOverlayAdd.classList.add('hidden');
 });
 
-// Enviar los datos del formulario
-document.getElementById('dynamic-form').addEventListener('submit', (event) => {
-    event.preventDefault();
-
-    const formData = new FormData(event.target);
-    const data = Object.fromEntries(formData.entries());
-
-    // Enviar datos al servidor
-    fetch('/add-item', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ parameter, data }),
-    })
-    .then(response => response.json())
-    .then(result => {
-        alert(result.message);
-        formOverlay.classList.add('hidden');
-    })
-    .catch(error => {
-        console.error('Error:', error);
+// Mostrar formulario flotante Edit Item al presionar el botón
+function showEditForm(data){
+    formOverlayEdit.classList.remove('hidden');
+    data.forEach((value, index) => {
+        const inputElement = document.getElementById(`input-${index}`);
+        const selectElement = document.getElementById(`select-${index}`);
+            
+        // Si el campo es un input (tipo text), asignar el valor directamente
+        if (inputElement) {
+            inputElement.value = value;
+        }
+        
+        // Si el campo es un select, buscar la opción con el texto que coincida
+        if (selectElement) {
+            // Buscar la opción cuyo texto coincida con el valor
+            const optionToSelect = Array.from(selectElement.options).find(option => option.text === value);
+            if (optionToSelect) {
+                optionToSelect.selected = true;
+            }
+        }
     });
-});
+}
+
+// Ocultar formulario flotante Edit Item al presionar "Cancelar"
+function hideEditForm(){
+    formOverlayEdit.classList.add('hidden');
+}
+
+
+function confirmDelete(itemId) {
+    let confirmAction = confirm("¿Estás seguro de que deseas eliminar este elemento?");
+    
+    if (confirmAction) {
+        document.getElementById(`delete-form-${itemId}`).submit();
+    } else {
+        alert("Operación cancelada.");
+    }
+}
+
+function confirmUpload() {
+    let confirmAction = confirm("¿Estás seguro de que deseas subir este archivo CSV y cargar sus datos en la base de datos?");
+    
+    if (confirmAction) {
+        document.getElementById(`csv-upload-form`).submit();
+    } else {
+        alert("Operación cancelada.");
+    }
+}
