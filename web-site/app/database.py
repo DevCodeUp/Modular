@@ -1,4 +1,5 @@
 import os
+import ctypes
 
 #os.add_dll_directory('D:\\USUARIO\\Documents\\UdeG\\Modular\\web-site\\app\\Drivers\\IBM\\clidriver\\bin')
 # Usando una ruta relativa
@@ -8,7 +9,9 @@ relative_path = os.path.join(os.getcwd(), 'app', 'Drivers', 'IBM', 'clidriver', 
 SSL_CERT_PATH = os.path.join(os.getcwd(), 'app', 'DigiCertGlobalRootCA.crt')
 
 # Añadir la ruta relativa
-os.add_dll_directory(relative_path)
+#os.add_dll_directory(relative_path)
+# Usar ctypes para añadir el directorio de la DLL
+ctypes.windll.kernel32.SetDllDirectoryW(relative_path)
 
 import ibm_db
 
